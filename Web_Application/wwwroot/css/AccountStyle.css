@@ -1,0 +1,59 @@
+﻿@media (max-width: 1920px) {
+
+    h1 {
+        font-size: 25px;
+    }
+
+    h2 {
+        font-size: 25px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+    button {
+        font-size: 16px;
+    }
+}
+
+#a_email {
+    text-align: center;
+    display: block;
+    font-size: 16px;
+    margin: 4px 2px;
+    width: 300px;
+}
+button {
+    
+    text-align: center;
+    display: block;
+    font-size: 16px;
+    margin: 4px 2px;
+    width: 300px;
+}
+
+.buton{
+    display:block;
+    margin:10px;
+}
+
+.container {
+    /* box-shadow:10px 10px 20px rgba(119,119,119,.5);*/
+}
+.leftbox {
+    /*box-shadow: 10px 10px 20px rgba(119,119,119,.5);*/
+    width: auto;
+    height: 270px;
+    float: left;
+}
+nav a{
+    list-style:none;
+    padding:55px;
+}
+
+.rightbox {
+    /*box-shadow: 10px 10px 20px rgba(119,119,119,.5);*/
+   text-align:center;
+   
+}
+
