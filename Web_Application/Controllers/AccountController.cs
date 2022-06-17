@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.Mail;
 using System.Net;
+using Microsoft.JSInterop;
 
 namespace Web_Application.Controllers
 {
@@ -67,16 +68,38 @@ namespace Web_Application.Controllers
         }
 
 
-          [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Account(UserData user)
         {
-            Account();
-            return View("Account"); 
+           
+            return View();
         }
 
        
+        public ActionResult redirect_email()
+        {
+            
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
 
-       
+            Response.Cookies.Append("open_form", "email", option);
+
+            return RedirectToAction("Account_email", "Account_mail");
+            
+        }
+
+        public ActionResult redirect_password()
+        {
+            
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "password", option);
+
+            return RedirectToAction("Account_password", "Account_pass");
+            
+        }
+
     } 
 }
