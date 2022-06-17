@@ -16,13 +16,7 @@ namespace Web_Application.Controllers
 {
     public class LogInController : Controller
     {
-        //private readonly IConfiguration configuration;
-
-
-        /*public LogInController(IConfiguration config)
-        {
-            this.configuration = config;
-        }*/
+       
         private IHttpContextAccessor Accessor;
 
 
