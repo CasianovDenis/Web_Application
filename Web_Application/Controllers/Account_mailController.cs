@@ -26,6 +26,7 @@ namespace Web_Application.Controllers
         public Account_mailController(IHttpContextAccessor _accessor)
         {
             this.Accessor = _accessor;
+           
         }
 
         public IActionResult Account_email()
@@ -33,13 +34,13 @@ namespace Web_Application.Controllers
             //extract data from cookie storage
             username = this.Accessor.HttpContext.Request.Cookies["UserName"];
             //set form display
-
+            ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
             ViewData["Username"] = username;
 
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(1);
-            Response.Cookies.Append("open_form", "email", option);
-            ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
+            
+           
 
             con.Open();
             string query_email = string.Format("select email from UserData " +
@@ -64,6 +65,19 @@ namespace Web_Application.Controllers
             return View();
         }
 
+        public ActionResult redirect_password()
+        {
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "password", option);
+
+            return RedirectToAction("Account_password", "Account_pass");
+
+        }
+
+       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -75,34 +89,14 @@ namespace Web_Application.Controllers
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(1);
 
-            ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
-
-            //check key
-            string key_email = this.Accessor.HttpContext.Request.Cookies["secret_key_email"];
-            if (ViewBag.open_form == "verification")
-            {
-                if (user.Secretkey == key_email)
-                {
-
-                    con.Open();
-
-                    SqlCommand cmd = new SqlCommand("update UserData set email='" + user.Email + "' where username='" + username + "'", con);
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    ViewData["WarningEmail"] = "Email was change";
-                    Response.Cookies.Append("open_form", "email", option);
-                }
-            }
-
+           
             //check if setting->email
 
             if (existemail(user) == true) { Response.Cookies.Append("open_form", "email", option); }
             else
        if (existemail(user) == false)
             {
-                Response.Cookies.Append("open_form", "verification", option);
-                
-
+                                
                 SmtpClient Smtp = new SmtpClient("smtp.mail.ru", 587);
                 Smtp.EnableSsl = true;
                 Smtp.Credentials = new NetworkCredential("username@gmail.com", "password");//real email and password
@@ -120,7 +114,9 @@ namespace Web_Application.Controllers
                 Smtp.Send(Message);
 
                 Response.Cookies.Append("secret_key_email", random_secret_key.ToString(), option);
+                Response.Cookies.Append("new_email", user.Email, option);
                 ViewData["WarningEmail"] = "Check you email";
+                return RedirectToAction("Verification_email", "Verification");
             }
 
             return View("Account_email");
@@ -143,6 +139,10 @@ namespace Web_Application.Controllers
 
             return flag;
         }
+
+       
+
+       
 
     }
 }

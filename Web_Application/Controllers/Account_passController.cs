@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,6 +9,8 @@ using System.Threading.Tasks;
 using Web_Application.Models;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.JSInterop;
 
 namespace Web_Application.Controllers
 {
@@ -37,10 +38,10 @@ namespace Web_Application.Controllers
 
         public IActionResult Account_password()
         {
-            //var storage = new LocalStorage();
+           
             //extract data from cookie storage
             username = this.Accessor.HttpContext.Request.Cookies["UserName"];
-          
+            ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
 
             ViewData["Username"] = username;
 
@@ -49,7 +50,7 @@ namespace Web_Application.Controllers
 
             Response.Cookies.Append("open_form", "password", option);
             //set form display
-            ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
+            //ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
 
             con.Open();
             string query_email = string.Format("select email from UserData " +
@@ -86,27 +87,6 @@ namespace Web_Application.Controllers
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(1);
             
-            //check key
-
-            string key_password = this.Accessor.HttpContext.Request.Cookies["secret_key_password"];
-           string password = this.Accessor.HttpContext.Request.Cookies["password"];
-            user.Password = password;
-
-            if (ViewBag.open_form == "verification")
-            {
-                if (user.Secretkey == key_password)
-                {
-                    
-                    con.Open();
-
-                    SqlCommand cmd = new SqlCommand("update UserData set password='" + password + "' where username='" + username + "'", con);
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    ViewData["WarningPassword"] = "Password was change";
-
-                    Response.Cookies.Append("open_form", "password", option);
-                }
-            }
 
             //check if setting->password
             if (oldpass(user) == true) { Response.Cookies.Append("open_form", "password", option); }
@@ -117,7 +97,7 @@ namespace Web_Application.Controllers
                     if (checkpass(user) == false)
                     {
                         Response.Cookies.Append("open_form", "verification", option);
-                        ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
+                        //ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
 
                         SmtpClient Smtp = new SmtpClient("smtp.mail.ru", 587);
                         Smtp.EnableSsl = true;
@@ -144,6 +124,7 @@ namespace Web_Application.Controllers
                         
 
                         ViewData["WarningPassword"] = "Check you email";
+                        return RedirectToAction("Verification_password", "Verification");
                     }
                     else
                         ViewData["WarningPassword"] = "Password is not secure";
@@ -154,6 +135,7 @@ namespace Web_Application.Controllers
             return View("Account_password");
         }
 
+       
 
         public bool checkpass(UserData user)
         {
@@ -203,6 +185,18 @@ namespace Web_Application.Controllers
             con.Close();
 
             return flag;
+        }
+
+        public ActionResult redirect_email()
+        {
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "email", option);
+
+            return RedirectToAction("Account_email", "Account_mail");
+
         }
     }
 }
