@@ -33,6 +33,7 @@ button {
 }
 
 .buton{
+    width:290px;
     display:block;
     margin:10px;
 }

@@ -1,40 +1,33 @@
-﻿@model Web_Application.Models.UserData
+﻿@model Web_Application.Models.UserData    
 @{
     ViewData["Title"] = "Account";
 }
 
-@if (ViewBag.open_form == "email")
-            {
-                <style>
-                    #profile {display: none;}
-                    #email { display: normal; }
-                    #password {display: none; }
-                    #tfa { display: none;}
-                     #verification{display:none;}
-                </style>
-            }
-else
-if (ViewBag.open_form == "verification")
-            {
-                <style>
-                    #profile {display: none;}
-                    #email { display: none; }
-                    #password {display: none; }
-                    #tfa { display: none;}
-                    #verification{display:normal;}
-                </style>
-            }
-else
-if (ViewBag.open_form == "password")
-            {
-                <style>
-                    #profile {display: none;}
-                    #email { display: none; }
-                    #password {display: normal; }
-                    #tfa { display: none;}
-                    #verification{display:none;}
-                </style>
-            }
+
+
+@{
+    <style>
+        #profile {
+            display: normal;
+        }
+
+        #email {
+            display: none;
+        }
+
+        #password {
+            display: none;
+        }
+
+        #tfa {
+            display: none;
+        }
+
+        #verification {
+            display: none;
+        }
+    </style>
+}
 
 
 <!DOCTYPE html>
@@ -44,7 +37,7 @@ if (ViewBag.open_form == "password")
     <script src="~/js/AccountScript.js"></script>
 </head>
 <body>
-  
+
     <h2 class="nav-item">
         Manage your account
     </h2>
@@ -58,12 +51,16 @@ if (ViewBag.open_form == "password")
     <div class="container">
         <div class="leftbox">
             <nav>
-                <button onclick="showprofile()" class="btn btn-primary" > Profile </button>
-                <a  asp-area="" asp-controller="Account_mail" asp-action="Account_email" class="btn btn-primary buton" > Email </a>
-                <a asp-area="" asp-controller="Account_pass" asp-action="Account_password" class="btn btn-primary buton"> Password </a>
-                @*<button onclick="show2fa()"  class="btn btn-primary" > Two-factor-authentication</button>*@
-            </nav>
-           
+                <button onclick="showprofile()" class="btn btn-primary"> Profile </button>
+                <form asp-action="redirect_email">
+                    <input type="submit" class="btn btn-primary buton" value="Email" />
+                </form>
+                <form asp-action="redirect_password">
+                    <input type="submit" class="btn btn-primary buton" value="Password" />
+                </form>
+                        @*<button onclick="show2fa()"  class="btn btn-primary" > Two-factor-authentication</button>*@
+</nav>
+
         </div>
         <form asp-action="Account">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
