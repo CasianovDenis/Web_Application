@@ -169,5 +169,17 @@ namespace Web_Application.Controllers
 
             
         }
+
+        public ActionResult redirect_on_2fa()
+        {
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "tfa", option);
+
+            return RedirectToAction("TFA", "TFA");
+
+        }
     }
 }
