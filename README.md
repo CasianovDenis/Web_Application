@@ -1,4 +1,4 @@
-# Web_Application @Author:Casianov Denis
+# Web_Application Author:Casianov Denis
 -It's web application, which was created using ASP.NET core
 framework and design pattern MVC.
 
