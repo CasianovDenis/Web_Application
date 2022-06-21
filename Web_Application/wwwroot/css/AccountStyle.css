@@ -58,3 +58,7 @@ nav a{
    
 }
 
+.qr_code{
+    float:left;
+    margin-left:100px;
+}
