@@ -17,8 +17,8 @@ namespace Web_Application.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-
-        public int TFA {get; set;}
+        
+        public string TFA {get; set;}
         public string Secretkey { get; set; }
     
     }
