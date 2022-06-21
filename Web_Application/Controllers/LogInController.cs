@@ -16,7 +16,7 @@ namespace Web_Application.Controllers
 {
     public class LogInController : Controller
     {
-       
+
         private IHttpContextAccessor Accessor;
 
 
@@ -42,48 +42,95 @@ namespace Web_Application.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SignIn(UserData user)
         {
-           
+
             SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
 
             con.Open();
             string query_username = string.Format("select username from UserData " +
                 "where username='{0}'", user.Username);
             string query_password = string.Format("select password from UserData " +
                 "where username='{0}'", user.Username);
+            string query_2fa = string.Format("select tfa from UserData " +
+               "where username='{0}'", user.Username);
 
             SqlCommand cmd = new SqlCommand(query_username, con);
             SqlDataReader reader = cmd.ExecuteReader();
 
-            if (reader.Read() == true)
+
+
+
+
+            SqlCommand cmd2 = new SqlCommand(query_2fa, con);
+            SqlDataReader reader2 = cmd2.ExecuteReader();
+
+            if (reader2.Read() == true)
             {
-                reader.Close();
-
-                SqlCommand cmd1 = new SqlCommand(query_password, con);
-                SqlDataReader reader1 = cmd1.ExecuteReader();
-
-                if (reader1.Read() == true)
+                                    
+                if (reader2.GetString(0) == "1")
                 {
-                    if (reader1.GetString(0) == user.Password)
+
+                    if (reader.Read() == true)
                     {
-                        
-                        CookieOptions option = new CookieOptions();
-                        option.Expires = DateTime.Now.AddDays(1);
+                        reader.Close();
 
-                        //Create a Cookie with a suitable Key and add the Cookie to Browser.
-                        Response.Cookies.Append("UserName", user.Username, option);
-                       
-                        return RedirectToAction("Account", "Account");
+                        SqlCommand cmd1 = new SqlCommand(query_password, con);
+                        SqlDataReader reader1 = cmd1.ExecuteReader();
+
+                        if (reader1.Read() == true)
+                        {
+                            if (reader1.GetString(0) == user.Password)
+                            {
+
+                               
+
+                                //Create a Cookie with a suitable Key and add the Cookie to Browser.
+                                Response.Cookies.Append("UserName", user.Username, option);
+
+                                return RedirectToAction("TFA_LogIn", "SignIn_TFA");
+                            }
+
+                        }
                     }
-
                 }
-                
-                    ViewData["Result"] = "Username or Password is incorect";
+                else
+                   if (reader2.GetString(0) == "0")
+                {
+                    if (reader.Read() == true)
+                    {
+                        reader.Close();
+
+                        SqlCommand cmd1 = new SqlCommand(query_password, con);
+                        SqlDataReader reader1 = cmd1.ExecuteReader();
+
+                        if (reader1.Read() == true)
+                        {
+                            if (reader1.GetString(0) == user.Password)
+                            {
+
+                               
+
+                                //Create a Cookie with a suitable Key and add the Cookie to Browser.
+                                Response.Cookies.Append("UserName", user.Username, option);
+
+                                return RedirectToAction("Account", "Account");
+                            }
+
+                        }
+                    }
+                }
+               
             }
-            
+            ViewData["Result"] = "Username or Password is incorect";
+
+
             con.Close();
             return View();
+            }
+
+
         }
-
-
     }
-}
+
