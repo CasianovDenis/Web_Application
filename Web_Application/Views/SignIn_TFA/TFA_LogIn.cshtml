@@ -1,0 +1,31 @@
+﻿@model Web_Application.Models.UserData
+@{
+    ViewData["Title"] = "LogIn";
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+</head>
+<body>
+    <form asp-action="TFA_LogIn">
+        <div>
+            <h1>Confirme you action</h1>
+
+            <br />
+            <h5>Introduce verification code of Google Authenticator</h5>
+            <br /> 
+             <h6>If pin is correct,but you get error,wait 1 minute,use this pin again and click Sign In </h6>
+            <input asp-for="TFA" type="text" />
+            <br /><br />
+            @ViewData["TFAWarning"]
+            <br /><br />
+            <input type="submit" class="btn btn-primary buton" value="SignIn" />
+        </div>
+    </form>
+    
+</body>
+</html>
