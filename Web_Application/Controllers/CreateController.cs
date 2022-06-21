@@ -13,6 +13,7 @@ namespace Web_Application.Controllers
 {
     public class CreateController : Controller
     {
+        SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
 
         private readonly ConString _conString;
 
@@ -37,8 +38,16 @@ namespace Web_Application.Controllers
                 {
                     if (checkpass(user) == false)
                     {
+                       
                         _conString.Add(user);
                         _conString.SaveChanges();
+
+
+                        con.Open();
+                            SqlCommand cmd = new SqlCommand("update UserData set tfa='" + 0 + "' where username='" + user.Username + "'", con);
+                            cmd.ExecuteNonQuery();
+                            con.Close();
+                      
                         ViewBag.message = "Account created successfully";
                     }
                 }
