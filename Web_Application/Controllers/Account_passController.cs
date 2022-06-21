@@ -135,7 +135,29 @@ namespace Web_Application.Controllers
             return View("Account_password");
         }
 
-       
+        public ActionResult redirect_email()
+        {
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "email", option);
+
+            return RedirectToAction("Account_email", "Account_mail");
+
+        }
+
+        public ActionResult redirect_on_2fa()
+        {
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "tfa", option);
+
+            return RedirectToAction("TFA", "TFA");
+
+        }
 
         public bool checkpass(UserData user)
         {
@@ -187,16 +209,6 @@ namespace Web_Application.Controllers
             return flag;
         }
 
-        public ActionResult redirect_email()
-        {
-
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "email", option);
-
-            return RedirectToAction("Account_email", "Account_mail");
-
-        }
+        
     }
 }
