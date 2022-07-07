@@ -12,3 +12,5 @@ key,when user change email or change password.
 service "Google authenticator" and this function can be enabled or disabled any time from user. 
 Two factor authentication used for protection
 user account.
+
+-This application support multi language.At the moment disponible "russian" and "english" language.
