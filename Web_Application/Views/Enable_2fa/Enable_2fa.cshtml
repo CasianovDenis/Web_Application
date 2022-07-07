@@ -45,28 +45,28 @@
 <body>
 
     <h2 class="nav-item">
-        Manage your account
+        @ViewData["TextManage"]
     </h2>
 
     <br />
     <h3>
-        Change your account settings
+        @ViewData["TextChange"]
     </h3>
     <hr />
 
     <div class="container">
         <div class="leftbox">
             <nav>
-                <button onclick="showprofile()" class="btn btn-primary"> Profile </button>
+                <button onclick="showprofile()" class="btn btn-primary"> @ViewData["Profile"] </button>
                 <form asp-action="redirect_email">
-                    <input type="submit" class="btn btn-primary buton" value="Email" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["Mail"]" />
                 </form>
                 <form asp-action="redirect_password">
-                    <input type="submit" class="btn btn-primary buton" value="Password" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["Password"]" />
                 </form>
 
                 <form asp-action="redirect_on_2fa">
-                    <input type="submit" class="btn btn-primary buton" value="Two-factor-authentication" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["tfa"]" />
                 </form>
 
 
@@ -125,9 +125,9 @@
 
                 <div id="enable_tfa">
                     
-                    <h5>Download Google Authenticator of Play Store or App Store</h5>
+                    <h5> @ViewData["Text_download"]</h5>
                     <br />
-                    <h6>Scan QRCode or introduce manual this key in application</h6>
+                    <h6>@ViewData["Text_scan"]</h6>
                     <br />
                     <div class="qr_code">
                         <img src="@ViewBag.qr_code" />
@@ -135,12 +135,12 @@
                     <br />
                     <h6>@ViewData["tfa_key"]</h6> 
                     <br />
-                    <h3>Introduce verification code</h3>
+                    <h3>@ViewData["Text_introduce"]</h3>
 
                     <input asp-for="TFA" type="text" />
                     <br /><br />
                     @ViewData["TFAWarning"]
-                    <input type="submit" class="btn btn-primary" value="Confirme" />
+                    <input type="submit" class="btn btn-primary" value="@ViewData["Confirme"]" />
                 </div>
 
                 <div id="verification">

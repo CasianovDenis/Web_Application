@@ -4,7 +4,7 @@
     ViewData["Title"] = "SignUp";
 }
 
-<h1 >SignUp</h1>
+<h1>@ViewData["SignUp"]</h1>
 
 <hr />
 <div class="row">
@@ -12,31 +12,31 @@
         <form asp-action="SignUp">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
+                <label asp-for="Username" class="control-label">@ViewData["User_name"]</label>
                 <input asp-for="Username" class="form-control" />
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
 
-            <p style="color:red">@ViewData["WarningUsername"]</p>
+            <p style="color:red">@ViewData["ExistUsername"]</p>
 
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">@ViewData["Mail"]</label>
                 <input type="email" asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
-            <p style="color:red">@ViewData["WarningEmail"]</p>
+            <p style="color:red">@ViewData["ExistEmail"]</p>
 
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
+                <label asp-for="Password" class="control-label">@ViewData["Password"]</label>
                 <input type="password" asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <p style="color:red">@ViewData["WarningPass"]</p>
+            <p style="color:red">@ViewData["SecurePass"]</p>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="@ViewData["Create"]" class="btn btn-primary" />
             </div>
             @ViewBag.message
         </form>

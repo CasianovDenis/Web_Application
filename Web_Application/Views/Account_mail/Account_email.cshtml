@@ -47,12 +47,12 @@
 <body>
 
     <h2 class="nav-item">
-        Manage your account
+        @ViewData["TextManage"]
     </h2>
 
     <br />
     <h3>
-        Change your account settings
+        @ViewData["TextChange"]
     </h3>
     <hr />
 
@@ -60,13 +60,13 @@
         <div class="leftbox">
             <nav>
 
-                <button onclick="showprofile()" class="nav-link active mt-auto btn btn-primary"> Profile </button>
-                <button onclick="showemail()" class="btn btn-primary buton" id="a_email"> Email </button>
+                <button onclick="showprofile()" class="nav-link active mt-auto btn btn-primary"> @ViewData["Profile"] </button>
+                <button onclick="showemail()" class="btn btn-primary buton" id="a_email"> @ViewData["Mail"] </button>
                 <form asp-action="redirect_password">
-                    <input type="submit" class="btn btn-primary buton" value="Password" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["Password"]" />
                 </form>
                 <form asp-action="redirect_on_2fa">
-                    <input type="submit" class="btn btn-primary buton" value="Two-factor-authentication" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["tfa"]" />
                 </form>
             </nav>
 
@@ -77,29 +77,28 @@
 
                 <div id="profile">
 
-                    <h1>Profile</h1>
+                    <h1>@ViewData["Profile"]</h1>
                     <br />
                     <h3 class="nav-item">
-                        Username:
+                        @ViewData["User_name"]:
                     </h3>
                     <input type="text" disabled value="@ViewData["Username"]" />
                 </div>
 
 
+
                 <div id="email">
-                    <h1>Manage email</h1>
+                    <h1>@ViewData["text_manage_email"]</h1>
                     <br />
-                    <h3>Email:</h3>
+                    <h3>@ViewData["Mail"]:</h3>
                     <input type="email" disabled value="@ViewData["Email"]" />
                     <br /><br />
-                    <h3>New Email:</h3>
+                     <h3> @ViewData["new_email"]:</h3>
                     <input asp-for="Email" type="email" />
 
                     <p style="color:red">@ViewData["WarningEmail"]</p>
 
-                    <input type="submit" class="btn btn-primary" value="Change email" />
-
-
+                    <input type="submit" class="btn btn-primary" value="@ViewData["Change_email"]" />
                 </div>
 
                 <div id="password">

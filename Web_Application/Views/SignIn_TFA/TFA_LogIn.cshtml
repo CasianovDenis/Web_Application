@@ -13,17 +13,17 @@
 <body>
     <form asp-action="TFA_LogIn">
         <div>
-            <h1>Confirme you action</h1>
+            <h1> @ViewData["Text_confirme"]</h1>
 
             <br />
-            <h5>Introduce verification code of Google Authenticator</h5>
-            <br /> 
-             <h6>If pin is correct,but you get error,wait 1 minute,use this pin again and click Sign In </h6>
+            <h5>@ViewData["Text_Introduce"]</h5>
+            <br />
+            <h6> @ViewData["Text_pin"]</h6>
             <input asp-for="TFA" type="text" />
             <br /><br />
-            @ViewData["TFAWarning"]
+            @ViewData["Incorectpin"]
             <br /><br />
-            <input type="submit" class="btn btn-primary buton" value="SignIn" />
+            <input type="submit" class="btn btn-primary buton" value="@ViewData["SignIn"]" />
         </div>
     </form>
     

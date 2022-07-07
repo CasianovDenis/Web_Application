@@ -1,4 +1,5 @@
-﻿@model Web_Application.Models.UserData    
+﻿
+@model Web_Application.Models.UserData
 @{
     ViewData["Title"] = "Account";
 }
@@ -30,11 +31,14 @@
         #enable_tfa {
             display: none;
         }
+
         #disable_tfa {
             display: none;
         }
     </style>
 }
+
+
 
 
 <!DOCTYPE html>
@@ -46,29 +50,29 @@
 <body>
 
     <h2 class="nav-item">
-        Manage your account
+        @ViewData["TextManage"]
     </h2>
 
     <br />
     <h3>
-        Change your account settings
+        @ViewData["TextChange"]
     </h3>
     <hr />
 
     <div class="container">
         <div class="leftbox">
             <nav>
-                <button onclick="showprofile()" class="btn btn-primary"> Profile </button>
+                <button onclick="showprofile()" class="btn btn-primary"> @ViewData["Profile"] </button>
                 <form asp-action="redirect_email">
-                    <input type="submit" class="btn btn-primary buton" value="Email" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["Mail"]" />
                 </form>
                 <form asp-action="redirect_password">
-                    <input type="submit" class="btn btn-primary buton" value="Password" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["Password"]" />
                 </form>
                 <form asp-action="redirect_on_2fa">
-                    <input type="submit" class="btn btn-primary buton" value="Two-factor-authentication" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["tfa"]" />
                 </form>
-                
+
             </nav>
 
         </div>
@@ -78,10 +82,10 @@
 
                 <div id="profile">
 
-                    <h1>Profile</h1>
+                    <h1>@ViewData["Profile"]</h1>
                     <br />
                     <h3 class="nav-item">
-                        Username:
+                        @ViewData["User_name"]:
                     </h3>
                     <input type="text" disabled value="@ViewData["Username"]" />
                 </div>

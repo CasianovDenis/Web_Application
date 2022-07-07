@@ -47,27 +47,27 @@
 <body>
 
     <h2 class="nav-item">
-        Manage your account
+        @ViewData["Text_Manage"]
     </h2>
 
     <br />
     <h3>
-        Change your account settings
+        @ViewData["Text_Change"]
     </h3>
     <hr />
 
     <div class="container">
         <div class="leftbox">
             <nav>
-                <button onclick="showprofile()" class="btn btn-primary"> Profile </button>
+                <button onclick="showprofile()" class="btn btn-primary"> @ViewData["Profile"] </button>
                 <form asp-action="redirect_email">
-                    <input type="submit" class="btn btn-primary buton" value="Email" />
+                    <input type="submit" class="btn btn-primary buton" value=" @ViewData["Mail"]" />
                 </form>
                 <form asp-action="redirect_password">
-                    <input type="submit" class="btn btn-primary buton" value="Password" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["Password"]" />
                 </form>
                 <form asp-action="redirect_on_2fa">
-                    <input type="submit" class="btn btn-primary buton" value="Two-factor-authentication" />
+                    <input type="submit" class="btn btn-primary buton" value="@ViewData["tfa"]" />
                 </form>
             </nav>
 
@@ -125,13 +125,13 @@
 
                 <div id="verification">
                     <h1>@ViewData["WarningEmail"]</h1>
-                    <h2>Confirme you action</h2>
+                    <h2> @ViewData["Text_confirme"]</h2>
                     <br />
-                    <h3>Introduce verification code</h3>
+                    <h3> @ViewData["Text_pin"]</h3>
 
                     <input asp-for="Secretkey" type="text" />
                     <br /> <br />
-                        <input type="submit" class="btn btn-primary" value="Confirme" />
+                        <input type="submit" class="btn btn-primary" value="@ViewData["Confirme"]" />
 </div>
             </div>
         </form>

@@ -19,17 +19,23 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" >Home</a>
-                        </li>*@
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" >Home</a>
+        </li>*@
                         @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"  >Privacy</a>
-                        </li>*@
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"  >Privacy</a>
+        </li>*@
                         <li class="nav-item" style="margin-left:auto;">
+                            <partial name="_Culture" />
+                        </li>
+
+                        <li class="nav-item" >
                             <a class="nav-link text-dark" asp-area="" asp-controller="LogIn" asp-action="SignIn" id="Sign_In">SignIn</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Create" asp-action="SignUp" id="Sign_Up">SignUp</a>
                         </li>
+
                         <li class="nav-item" asp-area="" asp-controller="Account" asp-action="Account">
                             @if (ViewBag.hide_elements_layout == true)
                             {
@@ -43,7 +49,7 @@
                                     <div class="dropdown-content">
                                         <a href="#">Username:@ViewData["Username"]</a>
                                         <a href="#">Email:@ViewData["Email"]</a>
-                                        <a  asp-area="" asp-controller="LogIn" asp-action="SignIn">Exit</a>
+                                        <a asp-area="" asp-controller="LogIn" asp-action="SignIn">Exit</a>
                                     </div>
                                 </div>
 
@@ -63,7 +69,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 -2022  WebApplication <h6>Autor:Casianov Denis</h6>
+            &copy; 2022  WebApplication <h6>Autor:Casianov Denis</h6>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
