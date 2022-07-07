@@ -1,6 +1,7 @@
 ﻿using Google.Authenticator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -17,17 +18,31 @@ namespace Web_Application.Controllers
         string username;
 
         private IHttpContextAccessor Accessor;
+        private readonly IHtmlLocalizer<SignIn_TFAController> _localizer;
 
 
-        public SignIn_TFAController(IHttpContextAccessor _accessor)
+        public SignIn_TFAController(IHttpContextAccessor _accessor, IHtmlLocalizer<SignIn_TFAController> localizer)
         {
             this.Accessor = _accessor;
+            _localizer = localizer;
         }
 
         public IActionResult TFA_LogIn()
         {
             username = this.Accessor.HttpContext.Request.Cookies["UserName"];
 
+            //Get data from localization and set
+            var get_resource_data = _localizer["Text_confirme"];
+            ViewData["Text_confirme"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_Introduce"];
+            ViewData["Text_Introduce"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_pin"];
+            ViewData["Text_pin"] = get_resource_data;
+
+            get_resource_data = _localizer["SignIn"];
+            ViewData["SignIn"] = get_resource_data;
 
             return View();
         }
@@ -57,9 +72,12 @@ namespace Web_Application.Controllers
 
 
                 if (status == true) return RedirectToAction("Account", "Account");
-                
+
                 else
-                    ViewData["TFAWarning"] = "Pin isn't corect";
+                {
+                    var get_resource_data = _localizer["Incorectpin"];
+                    ViewData["Incorectpin"] = get_resource_data;
+                }
 
                 con.Close();
             }

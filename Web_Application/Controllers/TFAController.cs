@@ -1,6 +1,7 @@
 ﻿using Google.Authenticator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -19,13 +20,13 @@ namespace Web_Application.Controllers
         private IHttpContextAccessor Accessor;
 
         private string username;
+        private readonly IHtmlLocalizer<TFAController> _localizer;
 
-
-
-
-        public TFAController(IHttpContextAccessor _accessor)
+        public TFAController(IHttpContextAccessor _accessor, IHtmlLocalizer<TFAController> localizer)
         {
             this.Accessor = _accessor;
+            _localizer = localizer;
+
         }
 
         public IActionResult TFA()
@@ -72,6 +73,38 @@ namespace Web_Application.Controllers
                          if (reader1.GetString(0) == "1") { ViewBag.display = 1; ViewData["2FA"] = "Enable"; }
             }
             con.Close();
+
+
+            //Get text for language set
+            var get_resource_data = _localizer["TextManage"];
+            ViewData["TextManage"] = get_resource_data;
+
+            get_resource_data = _localizer["TextChange"];
+            ViewData["TextChange"] = get_resource_data;
+
+            get_resource_data = _localizer["Profile"];
+            ViewData["Profile"] = get_resource_data;
+
+            get_resource_data = _localizer["Mail"];
+            ViewData["Mail"] = get_resource_data;
+
+            get_resource_data = _localizer["Password"];
+            ViewData["Password"] = get_resource_data;
+
+            get_resource_data = _localizer["tfa"];
+            ViewData["tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["User_name"];
+            ViewData["User_name"] = get_resource_data;
+
+            get_resource_data = _localizer["text_manage_tfa"];
+            ViewData["text_manage_tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["Enable_tfa"];
+            ViewData["Enable_tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["Disable_tfa"];
+            ViewData["Disable_tfa"] = get_resource_data;
             return View();
         }
 

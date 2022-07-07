@@ -1,6 +1,7 @@
 ﻿using Google.Authenticator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -21,11 +22,12 @@ namespace Web_Application.Controllers
         private string username;
 
         private string google_key;
+        private readonly IHtmlLocalizer<Enable_2faController> _localizer;
 
-
-        public Enable_2faController(IHttpContextAccessor _accessor)
+        public Enable_2faController(IHttpContextAccessor _accessor, IHtmlLocalizer<Enable_2faController> localizer)
         {
             this.Accessor = _accessor;
+            _localizer = localizer;
         }
         public IActionResult Enable_2fa()
         {
@@ -82,6 +84,36 @@ namespace Web_Application.Controllers
             string qrCodeImageUrl = setupInfo.QrCodeSetupImageUrl; //  assigning the Qr code information + URL to string
             ViewBag.qr_code = qrCodeImageUrl;// showing the qr code on the page "linking the string to image element"
 
+            //Get data from localization and set
+            var get_resource_data = _localizer["TextManage"];
+            ViewData["TextManage"] = get_resource_data;
+
+            get_resource_data = _localizer["TextChange"];
+            ViewData["TextChange"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_download"];
+            ViewData["Text_download"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_scan"];
+            ViewData["Text_scan"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_introduce"];
+            ViewData["Text_introduce"] = get_resource_data;
+
+            get_resource_data = _localizer["Confirme"];
+            ViewData["Confirme"] = get_resource_data;
+
+            get_resource_data = _localizer["Profile"];
+            ViewData["Profile"] = get_resource_data;
+
+            get_resource_data = _localizer["Mail"];
+            ViewData["Mail"] = get_resource_data;
+
+            get_resource_data = _localizer["Password"];
+            ViewData["Password"] = get_resource_data;
+
+            get_resource_data = _localizer["tfa"];
+            ViewData["tfa"] = get_resource_data;
 
             return View();
         }
@@ -141,6 +173,18 @@ namespace Web_Application.Controllers
             Response.Cookies.Append("open_form", "password", option);
 
             return RedirectToAction("Account_password", "Account_pass");
+
+        }
+
+        public ActionResult redirect_on_2fa()
+        {
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "tfa", option);
+
+            return RedirectToAction("TFA", "TFA");
 
         }
     }

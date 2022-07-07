@@ -1,6 +1,7 @@
 ﻿using Google.Authenticator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -17,18 +18,49 @@ namespace Web_Application.Controllers
         string username;
 
         private IHttpContextAccessor Accessor;
+        private readonly IHtmlLocalizer<Disable_2faController> _localizer;
 
 
-        public Disable_2faController(IHttpContextAccessor _accessor)
+        public Disable_2faController(IHttpContextAccessor _accessor, IHtmlLocalizer<Disable_2faController> localizer)
         {
             this.Accessor = _accessor;
+            _localizer = localizer;
         }
 
         public IActionResult Disable_2fa()
         {
             username = this.Accessor.HttpContext.Request.Cookies["UserName"];
 
+            //Get data from localization and set
+            var get_resource_data = _localizer["Text_confirme"];
+            ViewData["Text_confirme"] = get_resource_data;
 
+            get_resource_data = _localizer["Text_Introduce"];
+            ViewData["Text_Introduce"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_pin"];
+            ViewData["Text_pin"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_Manage"];
+            ViewData["Text_Manage"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_Change"];
+            ViewData["Text_Change"] = get_resource_data;
+
+            get_resource_data = _localizer["Profile"];
+            ViewData["Profile"] = get_resource_data;
+
+            get_resource_data = _localizer["Mail"];
+            ViewData["Mail"] = get_resource_data;
+
+            get_resource_data = _localizer["Password"];
+            ViewData["Password"] = get_resource_data;
+
+            get_resource_data = _localizer["tfa"];
+            ViewData["tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["Confirme"];
+            ViewData["Confirme"] = get_resource_data;
             return View();
         }
 

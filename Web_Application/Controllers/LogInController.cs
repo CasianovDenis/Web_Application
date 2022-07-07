@@ -10,7 +10,7 @@ using static System.Text.Encodings.Web.HtmlEncoder;
 using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace Web_Application.Controllers
 {
@@ -18,11 +18,12 @@ namespace Web_Application.Controllers
     {
 
         private IHttpContextAccessor Accessor;
+        private readonly IHtmlLocalizer<LogInController> _localizer;
 
-
-        public LogInController(IHttpContextAccessor _accessor)
+        public LogInController(IHttpContextAccessor _accessor, IHtmlLocalizer<LogInController> localizer)
         {
             this.Accessor = _accessor;
+            _localizer = localizer;
         }
 
         public IActionResult SignIn()
@@ -35,6 +36,18 @@ namespace Web_Application.Controllers
 
 
             ViewBag.hide_elements_layout = false;
+
+
+            //Get text for language set
+            var get_resource_data = _localizer["User_name"];
+            ViewData["User_name"] = get_resource_data;
+
+            get_resource_data = _localizer["Password"];
+            ViewData["Password"] = get_resource_data;
+
+            get_resource_data = _localizer["SignIn"];
+            ViewData["SignIn"] = get_resource_data;
+     
             return View();
         }
 
@@ -83,9 +96,6 @@ namespace Web_Application.Controllers
                         {
                             if (reader1.GetString(0) == user.Password)
                             {
-
-                               
-
                                 //Create a Cookie with a suitable Key and add the Cookie to Browser.
                                 Response.Cookies.Append("UserName", user.Username, option);
 
@@ -123,9 +133,9 @@ namespace Web_Application.Controllers
                 }
                
             }
-            ViewData["Result"] = "Username or Password is incorect";
-
-
+            var get_resource_data = _localizer["Incorectdata"];
+            ViewData["Incorectdata"] = get_resource_data;
+            
             con.Close();
             return View();
             }

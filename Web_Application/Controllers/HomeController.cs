@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,26 +16,23 @@ namespace Web_Application.Controllers
 {
     public class HomeController : Controller
     {
-        /* private readonly ILogger<HomeController> _logger;
-
-
-         public HomeController(ILogger<HomeController> logger)
-         {
-             _logger = logger;
-         }*/
+        private readonly IHtmlLocalizer<HomeController> _localizer;
         private IHttpContextAccessor Accessor;
+          private readonly ILogger<HomeController> _logger;
 
 
-        public HomeController(IHttpContextAccessor _accessor)
-        {
+          public HomeController(ILogger<HomeController> logger, IHttpContextAccessor _accessor, IHtmlLocalizer<HomeController> localizer)
+          {
+              _logger = logger;
             this.Accessor = _accessor;
-        }
-
-        
+            _localizer = localizer;
+          }
 
         public IActionResult Index()
 
         {
+            //var welcome = _localizer["Welcome"];
+            //ViewData["Welcome"] = welcome;
             string hide_layout = this.Accessor.HttpContext.Request.Cookies["hide_layout"];
 
             if (hide_layout=="true")
@@ -62,6 +61,15 @@ namespace Web_Application.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult CultureManagement(string culture,string returnUrl)
+        {
+            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(
+                new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.Now.AddDays(30) }
+                );
+            return LocalRedirect(returnUrl);
+        }
         public IActionResult Privacy()
         {
             return View();

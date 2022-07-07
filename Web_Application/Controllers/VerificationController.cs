@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -14,12 +15,15 @@ namespace Web_Application.Controllers
         SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
 
 
+        private readonly IHtmlLocalizer<VerificationController> _localizer;
 
         private IHttpContextAccessor Accessor;
 
-        public VerificationController(IHttpContextAccessor _accessor)
+        public VerificationController(IHttpContextAccessor _accessor, IHtmlLocalizer<VerificationController> localizer)
         {
             this.Accessor = _accessor;
+            _localizer = localizer;
+
 
         }
 
@@ -57,6 +61,35 @@ namespace Web_Application.Controllers
             Response.Cookies.Append("hide_layout", "true", option);
             //if log in hide unnecessary element
             ViewBag.hide_elements_layout = true;
+
+
+            //Get data from localization and set
+            var get_resource_data = _localizer["Text_confirme"];
+            ViewData["Text_confirme"] = get_resource_data;        
+
+            get_resource_data = _localizer["Text_pin"];
+            ViewData["Text_pin"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_Manage"];
+            ViewData["Text_Manage"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_Change"];
+            ViewData["Text_Change"] = get_resource_data;
+
+            get_resource_data = _localizer["Profile"];
+            ViewData["Profile"] = get_resource_data;
+
+            get_resource_data = _localizer["Mail"];
+            ViewData["Mail"] = get_resource_data;
+
+            get_resource_data = _localizer["Password"];
+            ViewData["Password"] = get_resource_data;
+
+            get_resource_data = _localizer["tfa"];
+            ViewData["tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["Confirme"];
+            ViewData["Confirme"] = get_resource_data;
             return View();
 
 
@@ -94,6 +127,38 @@ namespace Web_Application.Controllers
             Response.Cookies.Append("hide_layout", "true", option);
             //if log in hide unnecessary element
             ViewBag.hide_elements_layout = true;
+
+
+            //Get data from localization and set
+            var get_resource_data = _localizer["Text_confirme"];
+            ViewData["Text_confirme"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_Introduce"];
+            ViewData["Text_Introduce"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_pin"];
+            ViewData["Text_pin"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_Manage"];
+            ViewData["Text_Manage"] = get_resource_data;
+
+            get_resource_data = _localizer["Text_Change"];
+            ViewData["Text_Change"] = get_resource_data;
+
+            get_resource_data = _localizer["Profile"];
+            ViewData["Profile"] = get_resource_data;
+
+            get_resource_data = _localizer["Mail"];
+            ViewData["Mail"] = get_resource_data;
+
+            get_resource_data = _localizer["Password"];
+            ViewData["Password"] = get_resource_data;
+
+            get_resource_data = _localizer["tfa"];
+            ViewData["tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["Confirme"];
+            ViewData["Confirme"] = get_resource_data;
             return View();
 
 
@@ -179,6 +244,30 @@ namespace Web_Application.Controllers
             Response.Cookies.Append("open_form", "tfa", option);
 
             return RedirectToAction("TFA", "TFA");
+
+        }
+
+        public ActionResult redirect_email()
+        {
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "email", option);
+
+            return RedirectToAction("Account_email", "Account_mail");
+
+        }
+
+        public ActionResult redirect_password()
+        {
+
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            Response.Cookies.Append("open_form", "password", option);
+
+            return RedirectToAction("Account_password", "Account_pass");
 
         }
     }
