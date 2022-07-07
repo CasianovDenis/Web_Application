@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -20,13 +21,13 @@ namespace Web_Application.Controllers
         private IHttpContextAccessor Accessor;
 
         private string username;
+        private readonly IHtmlLocalizer<Account_mailController> _localizer;
 
-
-
-        public Account_mailController(IHttpContextAccessor _accessor)
+        public Account_mailController(IHttpContextAccessor _accessor, IHtmlLocalizer<Account_mailController> localizer)
         {
             this.Accessor = _accessor;
-           
+            _localizer = localizer;
+
         }
 
         public IActionResult Account_email()
@@ -62,6 +63,38 @@ namespace Web_Application.Controllers
             Response.Cookies.Append("hide_layout", "true", option);
             //if log in hide unnecessary element
             ViewBag.hide_elements_layout = true;
+
+
+            //Get text for language set
+            var get_resource_data = _localizer["TextManage"];
+            ViewData["TextManage"] = get_resource_data;
+
+            get_resource_data = _localizer["TextChange"];
+            ViewData["TextChange"] = get_resource_data;
+
+            get_resource_data = _localizer["Profile"];
+            ViewData["Profile"] = get_resource_data;
+
+            get_resource_data = _localizer["Mail"];
+            ViewData["Mail"] = get_resource_data;
+
+            get_resource_data = _localizer["Password"];
+            ViewData["Password"] = get_resource_data;
+
+            get_resource_data = _localizer["tfa"];
+            ViewData["tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["User_name"];
+            ViewData["User_name"] = get_resource_data;
+
+            get_resource_data = _localizer["text_manage_email"];
+            ViewData["text_manage_email"] = get_resource_data;
+
+            get_resource_data = _localizer["new_email"];
+            ViewData["new_email"] = get_resource_data;
+
+            get_resource_data = _localizer["Change_email"];
+            ViewData["Change_email"] = get_resource_data;
             return View();
         }
 
@@ -110,11 +143,11 @@ namespace Web_Application.Controllers
                                 
                 SmtpClient Smtp = new SmtpClient("smtp.mail.ru", 587);
                 Smtp.EnableSsl = true;
-                Smtp.Credentials = new NetworkCredential("username@gmail.com", "password");//real email and password
+                Smtp.Credentials = new NetworkCredential("email@gmail.com", "password");//real email and password
                                                                                                           //was hide
 
                 MailMessage Message = new MailMessage();
-                Message.From = new MailAddress("username@gmail.com");//real email was hide
+                Message.From = new MailAddress("email@gmail.com");//real email was hide
 
                 Message.To.Add(new MailAddress(ViewBag.email));
                 Message.Subject = "Change email";
@@ -144,7 +177,10 @@ namespace Web_Application.Controllers
             SqlCommand cmd = new SqlCommand(query_email, con);
             SqlDataReader reader = cmd.ExecuteReader();
             if (reader.Read() == true)
-            { ViewData["WarningEmail"] = "This Email already exist"; flag = true; }
+            {
+                var get_resource_data = _localizer["WarningEmail"];
+                ViewData["WarningEmail"] = get_resource_data;
+                flag = true; }
 
             con.Close();
 

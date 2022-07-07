@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace Web_Application.Controllers
 {
@@ -21,19 +22,16 @@ namespace Web_Application.Controllers
 
         Guid random_secret_key = Guid.NewGuid();
 
-     
-
         private IHttpContextAccessor Accessor;
 
         private string username;
+        private readonly IHtmlLocalizer<Account_passController> _localizer;
 
-       
-        
-
-
-        public Account_passController(IHttpContextAccessor _accessor)
+        public Account_passController(IHttpContextAccessor _accessor, IHtmlLocalizer<Account_passController> localizer)
         {
             this.Accessor = _accessor;
+            _localizer = localizer;
+
         }
 
         public IActionResult Account_password()
@@ -66,12 +64,39 @@ namespace Web_Application.Controllers
             }
             con.Close();
             
-
-
             //Create a Cookie with a suitable Key and add the Cookie to Browser.
             Response.Cookies.Append("hide_layout", "true", option);
             //if log in hide unnecessary element
             ViewBag.hide_elements_layout = true;
+
+
+            //Get text for language set
+            var get_resource_data = _localizer["TextManage"];
+            ViewData["TextManage"] = get_resource_data;
+
+            get_resource_data = _localizer["TextChange"];
+            ViewData["TextChange"] = get_resource_data;
+
+            get_resource_data = _localizer["Profile"];
+            ViewData["Profile"] = get_resource_data;
+
+            get_resource_data = _localizer["Mail"];
+            ViewData["Mail"] = get_resource_data;
+
+            get_resource_data = _localizer["Password"];
+            ViewData["Password"] = get_resource_data;
+
+            get_resource_data = _localizer["tfa"];
+            ViewData["tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["User_name"];
+            ViewData["User_name"] = get_resource_data;
+
+            get_resource_data = _localizer["new_pass"];
+            ViewData["new_pass"] = get_resource_data;
+
+            get_resource_data = _localizer["Change_pass"];
+            ViewData["Change_pass"] = get_resource_data;
             return View();
         }
 
@@ -101,11 +126,11 @@ namespace Web_Application.Controllers
 
                         SmtpClient Smtp = new SmtpClient("smtp.mail.ru", 587);
                         Smtp.EnableSsl = true;
-                        Smtp.Credentials = new NetworkCredential("username@gmail.com", "password");//real email and password
+                        Smtp.Credentials = new NetworkCredential("email@gmail.com", "password");//real email and password
                                                                                                                   //was hide
 
                         MailMessage Message = new MailMessage();
-                        Message.From = new MailAddress("username@gmail.com");//real email was hide
+                        Message.From = new MailAddress("email@gmail.com");//real email was hide
 
                         Message.To.Add(new MailAddress(ViewBag.email));
                         Message.Subject = "Change password";
@@ -117,8 +142,6 @@ namespace Web_Application.Controllers
 
                         Response.Cookies.Append("secret_key_password", random_secret_key.ToString(), option);
 
-
-                      
 
                         Response.Cookies.Append("password",user.Password, option);
                         
@@ -178,13 +201,15 @@ namespace Web_Application.Controllers
             }
             catch
             {
-                ViewData["WarningPassword"] = "Password is empty";
+                var get_resource_data = _localizer["EmptyPass"];
+                ViewData["EmptyPass"] = get_resource_data;
             }
             if (count >= 8) flag = false;
             else
                if (count < 8)
             {
-                ViewData["WarningPass"] = "Password is not secure nedeed 6+ word,uppercase and number";
+                var get_resource_data = _localizer["SecurePass"];
+                ViewData["SecurePass"] = get_resource_data;
                 flag = true;
             }
 
@@ -203,7 +228,10 @@ namespace Web_Application.Controllers
             SqlDataReader reader = cmd.ExecuteReader();
 
             if (reader.Read() == true)
-                if (reader.GetString(0) == user.Password) { ViewData["WarningPassword"] = "Password matches the old one"; flag = true; }
+                if (reader.GetString(0) == user.Password) {
+                    var get_resource_data = _localizer["Oldpass_true"];
+                    ViewData["Oldpass_true"] = get_resource_data;
+                    flag = true; }
             con.Close();
 
             return flag;
