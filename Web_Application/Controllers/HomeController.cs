@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Web_Application.Models;
 
@@ -61,7 +62,7 @@ namespace Web_Application.Controllers
 
         }
 
-        [HttpPost]
+            [HttpPost]
         public IActionResult CultureManagement(string culture,string returnUrl)
         {
             Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(
