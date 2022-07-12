@@ -126,11 +126,11 @@ namespace Web_Application.Controllers
 
                         SmtpClient Smtp = new SmtpClient("smtp.mail.ru", 587);
                         Smtp.EnableSsl = true;
-                        Smtp.Credentials = new NetworkCredential("email@gmail.com", "password");//real email and password
+                        Smtp.Credentials = new NetworkCredential("email@mail.ru", "password");//real email and password
                                                                                                                   //was hide
 
                         MailMessage Message = new MailMessage();
-                        Message.From = new MailAddress("email@gmail.com");//real email was hide
+                        Message.From = new MailAddress("email@mail.ru");//real email was hide
 
                         Message.To.Add(new MailAddress(ViewBag.email));
                         Message.Subject = "Change password";
@@ -158,6 +158,7 @@ namespace Web_Application.Controllers
             return View("Account_password");
         }
 
+        [HttpPost]
         public ActionResult redirect_email()
         {
 
@@ -170,6 +171,7 @@ namespace Web_Application.Controllers
 
         }
 
+        [HttpPost]
         public ActionResult redirect_on_2fa()
         {
 
