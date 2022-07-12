@@ -1,44 +1,7 @@
-﻿
-@model Web_Application.Models.UserData
+﻿@model Web_Application.Models.UserData
 @{
     ViewData["Title"] = "Account";
 }
-
-
-
-@{
-    <style>
-        #profile {
-            display: normal;
-        }
-
-        #email {
-            display: none;
-        }
-
-        #password {
-            display: none;
-        }
-
-        #tfa {
-            display: none;
-        }
-
-        #verification {
-            display: none;
-        }
-
-        #enable_tfa {
-            display: none;
-        }
-
-        #disable_tfa {
-            display: none;
-        }
-    </style>
-}
-
-
 
 
 <!DOCTYPE html>
@@ -46,9 +9,10 @@
 <head>
     <link rel="stylesheet" href="~/css/AccountStyle.css" />
     <script src="~/js/AccountScript.js"></script>
-</head>
-<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+</head>
+<body>   
     <h2 class="nav-item">
         @ViewData["TextManage"]
     </h2>
@@ -62,7 +26,14 @@
     <div class="container">
         <div class="leftbox">
             <nav>
-                <button onclick="showprofile()" class="btn btn-primary"> @ViewData["Profile"] </button>
+                <button class="btn btn-primary"> @ViewData["Profile"] </button>
+                <script>
+                    $(document).ready(function () {
+                        $("button").click(function () {
+                            $("#profile").show();                           
+                        });
+                    });
+                </script>
                 <form asp-action="redirect_email">
                     <input type="submit" class="btn btn-primary buton" value="@ViewData["Mail"]" />
                 </form>
@@ -91,52 +62,6 @@
                 </div>
 
 
-                <div id="email">
-                    <h1>Manage email</h1>
-                    <br />
-                    <h3>Email:</h3>
-                    <input type="email" disabled value="@ViewData["Email"]" />
-                    <br /><br />
-                    <h3>New Email:</h3>
-                    <input asp-for="Email" type="email" />
-
-                    <p style="color:red">@ViewData["WarningEmail"]</p>
-
-                    <input type="submit" class="btn btn-primary" value="Change email" />
-
-
-                </div>
-
-                <div id="password">
-                    <h1>Change password</h1>
-                    <br />
-                    <h3>New password:</h3>
-                    <input asp-for="Password" type="password" />
-                    <br /><br />
-                    @ViewData["WarningPassword"] <br /> <br />
-                    <input type="submit" class="btn btn-primary" value="Change password" />
-                </div>
-
-
-                <div id="tfa">
-                    <h1>Two-factor authentication(2FA)</h1>
-                    <br />
-                    <h3>2FA:@ViewData["2FA"]</h3>
-
-                    <input type="submit" class="btn btn-primary" value="Enable 2FA" />
-                    <input type="submit" class="btn btn-primary" value="Disable 2FA" />
-                </div>
-
-                <div id="verification">
-                    <h1>@ViewData["WarningEmail"]</h1>
-                    <h2>Confirme you action</h2>
-                    <br />
-                    <h3>Introduce verification code</h3>
-
-                    <input asp-for="Secretkey" type="text" />
-                    <br /><br />
-                    <input type="submit" class="btn btn-primary" value="Confirme" />
-                </div>
             </div>
         </form>
     </div>

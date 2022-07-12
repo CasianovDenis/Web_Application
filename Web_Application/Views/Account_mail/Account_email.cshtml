@@ -3,49 +3,21 @@
     ViewData["Title"] = "Account";
 }
 
-@if (ViewBag.open_form == "email")
-{
-    <style>
-        #profile {
-            display: none;
-        }
-
-        #email {
-            display: normal;
-        }
-
-        #password {
-            display: none;
-        }
-
-        #tfa {
-            display: none;
-        }
-
-        #verification {
-            display: none;
-        }
-        #enable_tfa {
-            display: none;
-        }
-
-        #disable_tfa {
-            display: none;
-        }
-    </style>
-}
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="~/css/AccountStyle.css" />
-    <script src="~/js/AccountScript.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </head>
 <body>
-
+    <script>
+        $(document).ready(function () {
+            $("#profile").hide();
+            $("#email").show();          
+        });
+    </script>
     <h2 class="nav-item">
         @ViewData["TextManage"]
     </h2>
@@ -60,8 +32,25 @@
         <div class="leftbox">
             <nav>
 
-                <button onclick="showprofile()" class="nav-link active mt-auto btn btn-primary"> @ViewData["Profile"] </button>
-                <button onclick="showemail()" class="btn btn-primary buton" id="a_email"> @ViewData["Mail"] </button>
+                <button class="nav-link active mt-auto btn btn-primary" id="button_profile"> @ViewData["Profile"] </button>
+                <script>
+                    $(document).ready(function () {
+                        $('#button_profile').click(function () {
+                            $("#profile").show();
+                            $("#email").hide();                            
+                        });
+                    });
+                </script>
+                <button class="btn btn-primary buton" id="button_email"> @ViewData["Mail"] </button>
+                <script>
+                    $(document).ready(function () {
+                        $('#button_email').click(function () {
+                            $("#profile").hide();
+                            $("#email").show();
+                            
+                        });
+                    });
+                </script>
                 <form asp-action="redirect_password">
                     <input type="submit" class="btn btn-primary buton" value="@ViewData["Password"]" />
                 </form>
@@ -93,44 +82,14 @@
                     <h3>@ViewData["Mail"]:</h3>
                     <input type="email" disabled value="@ViewData["Email"]" />
                     <br /><br />
-                     <h3> @ViewData["new_email"]:</h3>
+                    <h3> @ViewData["new_email"]:</h3>
                     <input asp-for="Email" type="email" />
 
                     <p style="color:red">@ViewData["WarningEmail"]</p>
 
                     <input type="submit" class="btn btn-primary" value="@ViewData["Change_email"]" />
                 </div>
-
-                <div id="password">
-                    <h1>Change password</h1>
-                    <br />
-                    <h3>New password:</h3>
-                    <input asp-for="Password" type="password" />
-                    <br /><br />
-                    @ViewData["WarningPassword"] <br /> <br />
-                    <input type="submit" class="btn btn-primary" value="Change password" />
-                </div>
-
-
-                <div id="tfa">
-                    <h1>Two-factor authentication(2FA)</h1>
-                    <br />
-                    <h3>2FA:@ViewData["2FA"]</h3>
-
-                    <input type="submit" class="btn btn-primary" value="Enable 2FA" />
-                    <input type="submit" class="btn btn-primary" value="Disable 2FA" />
-                </div>
-
-                <div id="verification">
-                    <h1>@ViewData["WarningPassword"]</h1>
-                    <h2>Confirme you action</h2>
-                    <br />
-                    <h3>Introduce verification code</h3>
-
-                    <input asp-for="Secretkey" type="text" />
-                    <br /><br />
-                    <input type="submit" class="btn btn-primary" value="Confirme" />
-                </div>
+                
             </div>
         </form>
     </div>
