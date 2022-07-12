@@ -3,40 +3,6 @@
     ViewData["Title"] = "Account";
 }
 
-
-
-@{
-    <style>
-        #profile {
-            display: none;
-        }
-
-        #email {
-            display: none;
-        }
-
-        #password {
-            display: none;
-        }
-
-        #tfa {
-            display: normal;
-        }
-
-        #verification {
-            display: none;
-        }
-        #enable_tfa {
-            display: none;
-        }
-
-        #disable_tfa {
-            display: none;
-        }
-    </style>
-}
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,7 +29,7 @@
     <div class="container">
         <div class="leftbox">
             <nav>
-                <button id="button_profile" class="btn btn-primary"> @ViewData["Profile"] </button>
+                <button id="button_profile" class="btn btn-primary buton"> @ViewData["Profile"] </button>
                 <script>
                     $(document).ready(function () {
                         $('#button_profile').click(function () {
@@ -80,7 +46,7 @@
                     <input type="submit" class="btn btn-primary buton" value="@ViewData["Password"]" />
                 </form>
 
-                <button id="button_tfa" class=" mt-auto btn btn-primary">@ViewData["tfa"]</button>
+                <button id="button_tfa" class=" mt-auto btn btn-primary buton">@ViewData["tfa"]</button>
 
                 <script>
                     $(document).ready(function () {

@@ -7,13 +7,15 @@
 <h1>@ViewData["SignUp"]</h1>
 
 <hr />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="SignUp">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            
+            <div class="form-group" >
                 <label asp-for="Username" class="control-label">@ViewData["User_name"]</label>
-                <input asp-for="Username" class="form-control" />
+                <input asp-for="Username" class="form-control" id="input_username"/>
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
 
@@ -21,7 +23,7 @@
 
             <div class="form-group">
                 <label asp-for="Email" class="control-label">@ViewData["Mail"]</label>
-                <input type="email" asp-for="Email" class="form-control" />
+                <input type="email" asp-for="Email" class="form-control" id="input_email"/>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
@@ -39,6 +41,17 @@
                 <input type="submit" value="@ViewData["Create"]" class="btn btn-primary" />
             </div>
             @ViewBag.message
+
+            <script>
+                $(document).ready(function () {
+                    $('#input_username').focus(function () {
+                        $(this).val("");
+                    });
+                    $('#input_email').focus(function () {
+                        $(this).val("");
+                    });
+                });
+            </script>
         </form>
     </div>
 </div>
