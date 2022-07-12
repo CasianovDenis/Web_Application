@@ -38,8 +38,7 @@ namespace Web_Application.Controllers
         {
           //extract data from cookie storage
              username = this.Accessor.HttpContext.Request.Cookies["UserName"];
-            //set form display
-            ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
+            
 
            
 
@@ -106,12 +105,7 @@ namespace Web_Application.Controllers
 
         [HttpPost]
         public ActionResult redirect_email()
-        {
-            
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "email", option);
+        {                    
 
             return RedirectToAction("Account_email", "Account_mail");
             
@@ -119,24 +113,14 @@ namespace Web_Application.Controllers
         [HttpPost]
         public ActionResult redirect_password()
         {
-            
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "password", option);
-
+                      
             return RedirectToAction("Account_password", "Account_pass");
             
         }
 
         [HttpPost]
         public ActionResult redirect_on_2fa()
-        {
-
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "tfa", option);
+        {           
 
             return RedirectToAction("TFA", "TFA");
 
