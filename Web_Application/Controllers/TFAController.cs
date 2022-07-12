@@ -121,6 +121,7 @@ namespace Web_Application.Controllers
                 return View();
         }
 
+        [HttpPost]
         public ActionResult redirect_email()
         {
 
@@ -133,6 +134,7 @@ namespace Web_Application.Controllers
 
         }
 
+        [HttpPost]
         public ActionResult redirect_password()
         {
 

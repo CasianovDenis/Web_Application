@@ -235,6 +235,7 @@ namespace Web_Application.Controllers
             
         }
 
+        [HttpPost]
         public ActionResult redirect_on_2fa()
         {
 
@@ -247,6 +248,7 @@ namespace Web_Application.Controllers
 
         }
 
+        [HttpPost]
         public ActionResult redirect_email()
         {
 
@@ -259,6 +261,7 @@ namespace Web_Application.Controllers
 
         }
 
+        [HttpPost]
         public ActionResult redirect_password()
         {
 

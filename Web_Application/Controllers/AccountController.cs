@@ -103,8 +103,8 @@ namespace Web_Application.Controllers
             return View();
         }
 
-        
 
+        [HttpPost]
         public ActionResult redirect_email()
         {
             
@@ -116,7 +116,7 @@ namespace Web_Application.Controllers
             return RedirectToAction("Account_email", "Account_mail");
             
         }
-
+        [HttpPost]
         public ActionResult redirect_password()
         {
             
@@ -129,6 +129,7 @@ namespace Web_Application.Controllers
             
         }
 
+        [HttpPost]
         public ActionResult redirect_on_2fa()
         {
 
