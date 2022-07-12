@@ -122,7 +122,6 @@ namespace Web_Application.Controllers
             con.Close();
 
 
-
             //Create a Cookie with a suitable Key and add the Cookie to Browser.
             Response.Cookies.Append("hide_layout", "true", option);
             //if log in hide unnecessary element
@@ -160,7 +159,6 @@ namespace Web_Application.Controllers
             get_resource_data = _localizer["Confirme"];
             ViewData["Confirme"] = get_resource_data;
             return View();
-
 
         }
 
@@ -230,19 +228,12 @@ namespace Web_Application.Controllers
                 }
                 else
                     
-                return View();
-
-            
+                return View();           
         }
 
         [HttpPost]
         public ActionResult redirect_on_2fa()
         {
-
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "tfa", option);
 
             return RedirectToAction("TFA", "TFA");
 
@@ -252,11 +243,6 @@ namespace Web_Application.Controllers
         public ActionResult redirect_email()
         {
 
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "email", option);
-
             return RedirectToAction("Account_email", "Account_mail");
 
         }
@@ -264,12 +250,6 @@ namespace Web_Application.Controllers
         [HttpPost]
         public ActionResult redirect_password()
         {
-
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "password", option);
-
             return RedirectToAction("Account_password", "Account_pass");
 
         }
