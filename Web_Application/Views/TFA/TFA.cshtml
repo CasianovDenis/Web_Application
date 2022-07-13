@@ -24,6 +24,9 @@
     <h3>
         @ViewData["TextChange"]
     </h3>
+    @if (ViewBag.display_2fa == "0")
+    {<img style="width:25px; height:25px; float:left;" src="https://cdn-icons-png.flaticon.com/512/179/179386.png" /> <p style="color:red;"> @ViewData["warning_security"]</p>
+    }
     <hr />
 
     <div class="container">
@@ -53,7 +56,6 @@
                         $('#button_tfa').click(function () {
                             $("#profile").hide();
                             $("#tfa").show();
-
                         });
                     });
                 </script>
@@ -65,7 +67,6 @@
             <div class="rightbox">
 
                 <div id="profile">
-
                     <h1>@ViewData["Profile"]</h1>
                     <br />
                     <h3 class="nav-item">
@@ -77,15 +78,32 @@
                 <div id="tfa">
                     <h1> @ViewData["text_manage_tfa"]</h1>
                     <br />
-                    <h3>2FA:@ViewData["2FA"]</h3>
-                    @if (ViewBag.display == 0)
-                    {<input type="submit" class="btn btn-primary" value="@ViewData["Enable_tfa"]" />}
-                    @if (ViewBag.display == 1)
-                    {<input type="submit" class="btn btn-primary" value="@ViewData["Disable_tfa"]" />}
+                    @if (ViewBag.display_2fa == "0")
+                    {<div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDisabled">Security:@ViewData["2FA"]</label>
+                        </div>}
+
+                    else
+if (ViewBag.display_2fa == "1")
+                    {
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                            <label class="form-check-label" for="flexSwitchCheckCheckedDisabled">Security:@ViewData["2FA"]</label>
+                        </div>
+                    }
+                    <br />
+
+                    <input id="button_submit" type="submit" class="btn btn-primary" />
+                    <script>
+                        $(document).ready(function () {
+                            $('#button_submit').hide();
+                            $(".form-check-input").click(function () {
+                                $('#button_submit').click();
+                            });                          
+                        });
+                    </script>
                 </div>
-
-
-               
             </div>
         </form>
     </div>
