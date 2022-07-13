@@ -35,7 +35,8 @@ namespace Web_Application.Controllers
             //extract data from cookie storage
             username = this.Accessor.HttpContext.Request.Cookies["UserName"];
             //set form display
-            ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
+            ViewBag.display_2fa = this.Accessor.HttpContext.Request.Cookies["status_2fa"];
+
             ViewData["Username"] = username;
 
             CookieOptions option = new CookieOptions();
@@ -95,17 +96,15 @@ namespace Web_Application.Controllers
 
             get_resource_data = _localizer["Change_email"];
             ViewData["Change_email"] = get_resource_data;
+
+            get_resource_data = _localizer["warning_security"];
+            ViewData["warning_security"] = get_resource_data;
             return View();
         }
 
         [HttpPost]
         public ActionResult redirect_password()
         {
-
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "password", option);
 
             return RedirectToAction("Account_password", "Account_pass");
 
@@ -114,11 +113,6 @@ namespace Web_Application.Controllers
         [HttpPost]
         public ActionResult redirect_on_2fa()
         {
-
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(1);
-
-            Response.Cookies.Append("open_form", "tfa", option);
 
             return RedirectToAction("TFA", "TFA");
 
@@ -138,8 +132,7 @@ namespace Web_Application.Controllers
            
             //check if setting->email
 
-            if (existemail(user) == true) { Response.Cookies.Append("open_form", "email", option); }
-            else
+           
        if (existemail(user) == false)
             {
                                 
