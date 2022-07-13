@@ -10,7 +10,7 @@ Table from database is used for "sign in" or "sign up" account.
 -Was connected "smtp protocol",which send email with secret
 key,when user change email or change password.
 
--Was connected two factor authentication is ised service "Google authenticator".
+-Was connected two factor authentication is used Google service "Google authenticator".
 This function can be enabled or disabled any time from user. 
 
 -This application support multi language.At the moment disponible "russian" and "english" language.
