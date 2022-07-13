@@ -38,9 +38,6 @@ namespace Web_Application.Controllers
         {
           //extract data from cookie storage
              username = this.Accessor.HttpContext.Request.Cookies["UserName"];
-            
-
-           
 
             ViewData["Username"] = username;
 
@@ -48,6 +45,7 @@ namespace Web_Application.Controllers
             option.Expires = DateTime.Now.AddDays(1);
 
             con.Open();
+            //get email fron table
             string query_email = string.Format("select email from UserData " +
                 "where username='{0}'", username);
 
@@ -56,10 +54,21 @@ namespace Web_Application.Controllers
 
             if (reader.Read() == true)
               ViewData["Email"] = reader.GetString(0);
-                
-            
-            con.Close();
-           
+
+            //get enable or not 2fa
+            string query_2fa = string.Format("select tfa from UserData " +
+               "where username='{0}'", username);
+
+            SqlCommand cmd1 = new SqlCommand(query_2fa, con);
+            SqlDataReader reader1 = cmd1.ExecuteReader();
+
+            if (reader1.Read() == true)
+            {
+                if (reader1.GetString(0) == "0") { ViewBag.display_2fa = "0"; Response.Cookies.Append("status_2fa", "0", option); }
+                else
+                         if (reader1.GetString(0) == "1") { ViewBag.display_2fa = "1"; Response.Cookies.Append("status_2fa", "1", option); }
+            }
+            con.Close();        
 
 
             //Create a Cookie with a suitable Key and add the Cookie to Browser.
@@ -89,6 +98,9 @@ namespace Web_Application.Controllers
 
             get_resource_data = _localizer["User_name"];
             ViewData["User_name"] = get_resource_data;
+
+            get_resource_data = _localizer["warning_security"];
+            ViewData["warning_security"] = get_resource_data;
             return View();
         }
 

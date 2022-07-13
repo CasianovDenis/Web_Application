@@ -34,6 +34,7 @@ namespace Web_Application.Controllers
             //extract data from cookie storage
             username = this.Accessor.HttpContext.Request.Cookies["UserName"];
             //set form display
+            ViewBag.display_2fa = this.Accessor.HttpContext.Request.Cookies["status_2fa"];
 
             ViewData["Username"] = username;
 

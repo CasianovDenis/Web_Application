@@ -34,6 +34,9 @@ namespace Web_Application.Controllers
             //extract data from cookie storage
             username = this.Accessor.HttpContext.Request.Cookies["UserName"];
 
+            ViewBag.display_2fa = this.Accessor.HttpContext.Request.Cookies["status_2fa"];
+           
+
             ViewData["Username"] = username;
 
             CookieOptions option = new CookieOptions();
@@ -118,6 +121,8 @@ namespace Web_Application.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Enable_2fa(UserData user)
         {
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
 
             Enable_2fa();
             google_key= this.Accessor.HttpContext.Request.Cookies["google_key"];
@@ -139,6 +144,9 @@ namespace Web_Application.Controllers
 
 
                 con.Close();
+
+                ViewBag.display_2fa = "1"; 
+                Response.Cookies.Append("status_2fa", "1", option);
 
                 return RedirectToAction("TFA", "TFA");
             }

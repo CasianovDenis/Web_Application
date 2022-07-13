@@ -32,7 +32,8 @@ namespace Web_Application.Controllers
         public IActionResult TFA()
         {
             //extract data from cookie storage
-            username = this.Accessor.HttpContext.Request.Cookies["UserName"];           
+            username = this.Accessor.HttpContext.Request.Cookies["UserName"];
+            ViewBag.display_2fa = this.Accessor.HttpContext.Request.Cookies["status_2fa"];
 
             ViewData["Username"] = username;
 
@@ -64,9 +65,9 @@ namespace Web_Application.Controllers
 
             if (reader1.Read() == true)
             {
-                if (reader1.GetString(0) == "0") { ViewBag.display = 0; ViewData["2FA"] = "Disable"; }
+                if (reader1.GetString(0) == "0") { ViewBag.display_2fa = "0"; ViewData["2FA"] = "Disabled"; }
                 else
-                         if (reader1.GetString(0) == "1") { ViewBag.display = 1; ViewData["2FA"] = "Enable"; }
+                         if (reader1.GetString(0) == "1") { ViewBag.display = "1"; ViewData["2FA"] = "Enabled"; }
             }
             con.Close();
 
@@ -101,6 +102,9 @@ namespace Web_Application.Controllers
 
             get_resource_data = _localizer["Disable_tfa"];
             ViewData["Disable_tfa"] = get_resource_data;
+
+            get_resource_data = _localizer["warning_security"];
+            ViewData["warning_security"] = get_resource_data;
             return View();
         }
 
@@ -110,9 +114,9 @@ namespace Web_Application.Controllers
         public ActionResult TFA(UserData user)
         {
             TFA();
-            if (ViewBag.display == 0) return RedirectToAction("Enable_2fa", "Enable_2fa");
+            if (ViewBag.display_2fa == "0") return RedirectToAction("Enable_2fa", "Enable_2fa");
             else
-            if (ViewBag.display == 1) return RedirectToAction("Disable_2fa", "Disable_2fa");
+            if (ViewBag.display_2fa == "1") return RedirectToAction("Disable_2fa", "Disable_2fa");
             else
                 return View();
         }

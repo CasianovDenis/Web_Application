@@ -33,6 +33,7 @@ namespace Web_Application.Controllers
 
         {
             string hide_layout = this.Accessor.HttpContext.Request.Cookies["hide_layout"];
+            ViewBag.display_2fa = this.Accessor.HttpContext.Request.Cookies["status_2fa"];
 
             if (hide_layout=="true")
             {

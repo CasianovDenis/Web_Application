@@ -31,6 +31,14 @@ namespace Web_Application.Controllers
         {
             username = this.Accessor.HttpContext.Request.Cookies["UserName"];
 
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
+            //Create a Cookie with a suitable Key and add the Cookie to Browser.
+            Response.Cookies.Append("hide_layout", "true", option);
+            //if log in hide unnecessary element
+            ViewBag.hide_elements_layout = true;
+
             //Get data from localization and set
             var get_resource_data = _localizer["Text_confirme"];
             ViewData["Text_confirme"] = get_resource_data;
@@ -68,6 +76,9 @@ namespace Web_Application.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Disable_2fa(UserData user)
         {
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+
             Disable_2fa();
             string query_key = string.Format("select secretkey from UserData " +
                 "where username='{0}'", username);
@@ -89,15 +100,16 @@ namespace Web_Application.Controllers
 
 
                 if (status == true)
-                {
-                   
+                {               
                    
                     SqlCommand cmd1 = new SqlCommand("update UserData set tfa='" + 0 + "' where username='" + username + "'", con);
                     cmd1.ExecuteNonQuery();
 
                     SqlCommand cmd2 = new SqlCommand("update UserData set secretkey='" + 0 + "' where username='" + username + "'", con);
                     cmd2.ExecuteNonQuery();
-                    
+
+                    ViewBag.display_2fa = "0";
+                    Response.Cookies.Append("status_2fa", "0", option);
 
                     return RedirectToAction("TFA", "TFA"); }
 
