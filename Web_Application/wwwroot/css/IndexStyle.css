@@ -21,17 +21,38 @@
         font-family: "Times New Roman", Times, serif;
         font-size: 30px;
     }
+   
     #image {
         margin-left: 60%;
         width: 400px;
-        height: 300px;
-        position: relative;
-        margin-top:-9%;
+        height: 300px;       
+        margin-top: -9%;
+    }
+        .image_carousel {
+            height: auto;
+        }
+
+        #download_icon :hover {
+            cursor: pointer;
+        }
+
+        footer {
+            height: 10px;
+            width: auto;
+        }
     }
 
-  
-    #download_icon :hover
-    {
-        cursor:pointer;
+@media only screen and (max-width: 480px) {
+    .image {
+        width: 1000%;
+        height: auto;
+    }
+
+    #button_download {
+        width: 50%;
+    }
+
+    #welcome-text {
+        width: 50%;
     }
 }
