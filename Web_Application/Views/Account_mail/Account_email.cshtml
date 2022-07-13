@@ -15,7 +15,7 @@
     <script>
         $(document).ready(function () {
             $("#profile").hide();
-            $("#email").show();          
+            $("#email").show();
         });
     </script>
     <h2 class="nav-item">
@@ -26,18 +26,21 @@
     <h3>
         @ViewData["TextChange"]
     </h3>
+    @if (ViewBag.display_2fa == "0")
+    {<img style="width:25px; height:25px; float:left;" src="https://cdn-icons-png.flaticon.com/512/179/179386.png" /> <p style="color:red;"> @ViewData["warning_security"]</p>}
+
     <hr />
 
     <div class="container">
         <div class="leftbox">
             <nav>
 
-                <button class="nav-link active mt-auto btn btn-primary buton" id="button_profile"> @ViewData["Profile"] </button>
+                <button class="btn btn-primary buton" id="button_profile"> @ViewData["Profile"] </button>
                 <script>
                     $(document).ready(function () {
                         $('#button_profile').click(function () {
                             $("#profile").show();
-                            $("#email").hide();                            
+                            $("#email").hide();
                         });
                     });
                 </script>
@@ -47,7 +50,7 @@
                         $('#button_email').click(function () {
                             $("#profile").hide();
                             $("#email").show();
-                            
+
                         });
                     });
                 </script>
@@ -89,7 +92,7 @@
 
                     <input type="submit" class="btn btn-primary" value="@ViewData["Change_email"]" />
                 </div>
-                
+
             </div>
         </form>
     </div>

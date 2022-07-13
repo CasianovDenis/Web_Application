@@ -11,7 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 </head>
-<body>   
+<body>
     <h2 class="nav-item">
         @ViewData["TextManage"]
     </h2>
@@ -20,7 +20,8 @@
     <h3>
         @ViewData["TextChange"]
     </h3>
-    <hr />
+    @if (ViewBag.display_2fa == "0") {<img style="width:25px; height:25px; float:left;" src="https://cdn-icons-png.flaticon.com/512/179/179386.png" /> <p style="color:red;"> @ViewData["warning_security"]</p>}
+        <hr />
 
     <div class="container">
         <div class="leftbox">
@@ -29,7 +30,7 @@
                 <script>
                     $(document).ready(function () {
                         $("button").click(function () {
-                            $("#profile").show();                           
+                            $("#profile").show();
                         });
                     });
                 </script>
