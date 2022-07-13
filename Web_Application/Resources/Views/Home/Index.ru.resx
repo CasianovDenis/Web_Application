@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="carousel_convenient" xml:space="preserve">
+    <value>Простой чат</value>
+  </data>
+  <data name="carousel_login" xml:space="preserve">
+    <value>Удобный вход</value>
+  </data>
+  <data name="carousel_protect" xml:space="preserve">
+    <value>Высокая защита</value>
+  </data>
+  <data name="convenient_text" xml:space="preserve">
+    <value>Общение с вашими друзьями в реальном времени</value>
+  </data>
   <data name="download_chat" xml:space="preserve">
     <value>Скачать </value>
+  </data>
+  <data name="login_text" xml:space="preserve">
+    <value>Войдите в чат используя данные из веб приложения</value>
+  </data>
+  <data name="protect_text" xml:space="preserve">
+    <value>Двух этапная аутентификация от Google защитит ваш акаунт</value>
   </data>
   <data name="welcome_text" xml:space="preserve">
     <value>Скачайте чат приложеие для вашего компьютера</value>

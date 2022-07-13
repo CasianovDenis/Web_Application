@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="carousel_convenient" xml:space="preserve">
+    <value>Convenient chat</value>
+  </data>
+  <data name="carousel_login" xml:space="preserve">
+    <value>Easiest Login</value>
+  </data>
+  <data name="carousel_protect" xml:space="preserve">
+    <value>High protect</value>
+  </data>
+  <data name="convenient_text" xml:space="preserve">
+    <value>Real Time chatting with your friends</value>
+  </data>
   <data name="download_chat" xml:space="preserve">
     <value>Download</value>
+  </data>
+  <data name="login_text" xml:space="preserve">
+    <value>You can sign in using data from web application</value>
+  </data>
+  <data name="protect_text" xml:space="preserve">
+    <value>2fa from google protect your account</value>
   </data>
   <data name="welcome_text" xml:space="preserve">
     <value>Download chat application for dekstop</value>

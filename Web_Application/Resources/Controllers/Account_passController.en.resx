@@ -153,4 +153,7 @@
   <data name="User_name" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="warning_security" xml:space="preserve">
+    <value>Your account is not secure, enable two-factor authentication</value>
+  </data>
 </root>

@@ -153,4 +153,7 @@
   <data name="User_name" xml:space="preserve">
     <value>Имя пользователя</value>
   </data>
+  <data name="warning_security" xml:space="preserve">
+    <value>Ваш аккаунт не защищён подключите двух этапную аутентификацию</value>
+  </data>
 </root>

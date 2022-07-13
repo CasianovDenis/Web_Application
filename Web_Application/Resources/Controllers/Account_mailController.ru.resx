@@ -153,4 +153,7 @@
   <data name="WarningEmail" xml:space="preserve">
     <value>Такой почтовый адрес уже существует</value>
   </data>
+  <data name="warning_security" xml:space="preserve">
+    <value>Ваш аккаунт не защищён подключите двух этапную аутентификацию</value>
+  </data>
 </root>
