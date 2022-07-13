@@ -32,8 +32,6 @@ namespace Web_Application.Controllers
         public IActionResult Index()
 
         {
-            //var welcome = _localizer["Welcome"];
-            //ViewData["Welcome"] = welcome;
             string hide_layout = this.Accessor.HttpContext.Request.Cookies["hide_layout"];
 
             if (hide_layout=="true")
@@ -70,10 +68,6 @@ namespace Web_Application.Controllers
                 new CookieOptions { Expires = DateTimeOffset.Now.AddDays(30) }
                 );
             return LocalRedirect(returnUrl);
-        }
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
