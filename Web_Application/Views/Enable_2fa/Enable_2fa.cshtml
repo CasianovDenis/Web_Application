@@ -49,8 +49,6 @@
                 <form asp-action="redirect_on_2fa">
                     <input type="submit" class="btn btn-primary buton" value="@ViewData["tfa"]" />
                 </form>
-
-
             </nav>
 
         </div>
@@ -84,7 +82,7 @@
 
                     <input asp-for="TFA" type="text" />
                     <br /><br />
-                    @ViewData["TFAWarning"]
+                          <p style="color:red;">@ViewData["TFAWarning"]</p>
                     <input type="submit" class="btn btn-primary" value="@ViewData["Confirme"]" />
                 </div>
 
