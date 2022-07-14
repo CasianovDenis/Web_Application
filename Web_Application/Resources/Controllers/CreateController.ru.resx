@@ -120,6 +120,9 @@
   <data name="Create" xml:space="preserve">
     <value>Создать </value>
   </data>
+  <data name="create_message" xml:space="preserve">
+    <value>Аккаунт успешно создан</value>
+  </data>
   <data name="ExistEmail" xml:space="preserve">
     <value>Такой почтовый адрес существует</value>
   </data>

@@ -120,6 +120,9 @@
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="create_message" xml:space="preserve">
+    <value>Account created successfully</value>
+  </data>
   <data name="ExistEmail" xml:space="preserve">
     <value>This Email already exist</value>
   </data>
