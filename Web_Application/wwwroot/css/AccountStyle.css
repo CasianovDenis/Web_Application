@@ -16,6 +16,20 @@
     }
 }
 
+/*layout*/
+#account_image
+{
+    margin-left:100px;
+    margin-top:5px;
+}
+
+#svg_arrow {
+    margin-top: 5px;
+    width: 16px; 
+    height: 16px;
+}
+
+
 #a_email {
     text-align: center;
     display: block;
