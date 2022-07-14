@@ -7,6 +7,8 @@ framework and design pattern MVC.
 -Was connected database "Microsoft Server Developper". 
 Table from database is used for "sign in" or "sign up" account.
 
+-Data from table is extract using Entity Framework query.
+
 -Was connected "smtp protocol",which send email with secret
 key,when user change email or change password.
 
