@@ -120,9 +120,6 @@
   <data name="Change_pass" xml:space="preserve">
     <value>Change password</value>
   </data>
-  <data name="EmptyPass" xml:space="preserve">
-    <value>Password is empty</value>
-  </data>
   <data name="Mail" xml:space="preserve">
     <value>Email</value>
   </data>

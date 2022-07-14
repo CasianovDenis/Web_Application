@@ -120,9 +120,6 @@
   <data name="Change_pass" xml:space="preserve">
     <value>Изменить пароль</value>
   </data>
-  <data name="EmptyPass" xml:space="preserve">
-    <value>Пароль не введён</value>
-  </data>
   <data name="Mail" xml:space="preserve">
     <value>Почтовый адрес</value>
   </data>
