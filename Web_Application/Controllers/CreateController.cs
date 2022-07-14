@@ -13,9 +13,7 @@ using Microsoft.AspNetCore.Mvc.Localization;
 namespace Web_Application.Controllers
 {
     public class CreateController : Controller
-    {
-        SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
+    {        
         private readonly ConString _conString;
         private readonly IHtmlLocalizer<CreateController> _localizer;
 
@@ -56,17 +54,13 @@ namespace Web_Application.Controllers
                 {
                     if (checkpass(user) == false)
                     {
-                       
+                        user.TFA = "0";
                         _conString.Add(user);
                         _conString.SaveChanges();
 
 
-                        con.Open();
-                            SqlCommand cmd = new SqlCommand("update UserData set tfa='" + 0 + "' where username='" + user.Username + "'", con);
-                            cmd.ExecuteNonQuery();
-                            con.Close();
-                      
-                        ViewBag.message = "Account created successfully";
+                        var get_resource_data = _localizer["create_message"];
+                        ViewData["create_message"] = get_resource_data;
                     }
                 }
             }
@@ -78,24 +72,15 @@ namespace Web_Application.Controllers
         public bool existusername(UserData user)
         {
             bool flag=false;
-           
-            SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
+
+            var username = _conString.UserData.Where(name => name.Username == user.Username)
+                .FirstOrDefault();
             
-            con.Open();
-            string query_username = string.Format("select username from UserData " +
-                "where username='{0}'", user.Username);
-
-
-            SqlCommand cmd = new SqlCommand(query_username, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read() == true)
-            {
+            if (username != null)
+            { flag = true;
                 var get_resource_data = _localizer["ExistUsername"];
                 ViewData["ExistUsername"] = get_resource_data;
-                flag = true; }
-
-            con.Close();
-
+            }
             return flag;
         }
 
@@ -104,22 +89,14 @@ namespace Web_Application.Controllers
         {
             bool flag = false;
 
-            SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
+            var username = _conString.UserData.Where(name => name.Email == user.Email)
+                .FirstOrDefault();
 
-            con.Open();
-            string query_email = string.Format("select email from UserData " +
-                "where email='{0}'", user.Email);
-
-            SqlCommand cmd = new SqlCommand(query_email, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read() == true)
-            {
+            if (username != null)
+            { flag = true;
                 var get_resource_data = _localizer["ExistEmail"];
-                ViewData["ExistEmail"] = get_resource_data; 
-                 flag = true; }
-
-            con.Close();
-
+                ViewData["ExistEmail"] = get_resource_data;
+            }
             return flag;
         }
 
