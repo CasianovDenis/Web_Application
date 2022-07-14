@@ -37,6 +37,24 @@ namespace Web_Application.Controllers
             Response.Cookies.Append("hide_layout", "false", option);
 
             ViewBag.hide_elements_layout = false;
+            ViewBag.statusbox= this.Accessor.HttpContext.Request.Cookies["statusbox"];
+            string username = this.Accessor.HttpContext.Request.Cookies["UserName"];
+            string statusbox = this.Accessor.HttpContext.Request.Cookies["statusbox"];
+
+            var user_db = _conString.UserData.Single(userdata => userdata.Username == username);
+
+            if (statusbox == "true")
+            {
+
+                ViewBag.save_username = user_db.Username;
+                ViewBag.save_password = user_db.Password;
+            }
+            else
+                    if (statusbox == "false")
+            {
+                ViewBag.save_username = "";
+                ViewBag.save_username = "";
+            }
 
             //Get text for language set
             var get_resource_data = _localizer["User_name"];
@@ -47,7 +65,10 @@ namespace Web_Application.Controllers
 
             get_resource_data = _localizer["SignIn"];
             ViewData["SignIn"] = get_resource_data;
-     
+
+            get_resource_data = _localizer["Remember"];
+            ViewData["Remember"] = get_resource_data;
+
             return View();
         }
 
@@ -96,6 +117,36 @@ namespace Web_Application.Controllers
                        
             return View();
             }
+
+        [HttpPost]
+        public ActionResult checkbox()
+        {
+            string statusbox = this.Accessor.HttpContext.Request.Cookies["statusbox"];
+            
+            if (statusbox=="true") {
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTime.Now.AddDays(1);
+
+                //Create a Cookie with a suitable Key and add the Cookie to Browser.
+                Response.Cookies.Append("statusbox", "false", option);
+
+                ViewBag.statusbox = "false";
+            }
+            else
+                    if (statusbox=="false")
+            {
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTime.Now.AddDays(1);
+
+                //Create a Cookie with a suitable Key and add the Cookie to Browser.
+                Response.Cookies.Append("statusbox", "true", option);
+
+                ViewBag.statusbox = "true";
+            }
+
+             return RedirectToAction("SignIn", "LogIn");
+        }
+
         }
     }
 
