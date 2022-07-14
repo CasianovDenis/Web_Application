@@ -13,16 +13,15 @@ namespace Web_Application.Controllers
 {
     public class Disable_2faController : Controller
     {
-        SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
         string username;
-
+        private readonly ConString _conString;
         private IHttpContextAccessor Accessor;
         private readonly IHtmlLocalizer<Disable_2faController> _localizer;
 
 
-        public Disable_2faController(IHttpContextAccessor _accessor, IHtmlLocalizer<Disable_2faController> localizer)
+        public Disable_2faController(ConString conection,IHttpContextAccessor _accessor, IHtmlLocalizer<Disable_2faController> localizer)
         {
+            _conString = conection;
             this.Accessor = _accessor;
             _localizer = localizer;
         }
@@ -80,17 +79,12 @@ namespace Web_Application.Controllers
             option.Expires = DateTime.Now.AddDays(1);
 
             Disable_2fa();
-            string query_key = string.Format("select secretkey from UserData " +
-                "where username='{0}'", username);
-
-            con.Open();
-            SqlCommand cmd = new SqlCommand(query_key, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if (reader.Read() == true)
+            
+            var user_db = _conString.UserData.Single(userdata=>userdata.Username == username);
+            
+            if(user_db.Secretkey!=null)
             {
-                string google_key = reader.GetString(0);
-
+                string google_key = user_db.Secretkey;
 
                 TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
 
@@ -98,15 +92,11 @@ namespace Web_Application.Controllers
 
                 bool status = tfa.ValidateTwoFactorPIN(google_key, pin, TimeSpan.FromSeconds(30));
 
-
                 if (status == true)
-                {               
-                   
-                    SqlCommand cmd1 = new SqlCommand("update UserData set tfa='" + 0 + "' where username='" + username + "'", con);
-                    cmd1.ExecuteNonQuery();
-
-                    SqlCommand cmd2 = new SqlCommand("update UserData set secretkey='" + 0 + "' where username='" + username + "'", con);
-                    cmd2.ExecuteNonQuery();
+                {
+                    user_db.TFA = "0";
+                    user_db.Secretkey = "0";
+                    _conString.SaveChanges();   
 
                     ViewBag.display_2fa = "0";
                     Response.Cookies.Append("status_2fa", "0", option);
@@ -116,27 +106,21 @@ namespace Web_Application.Controllers
                 else
                     ViewData["TFAWarning"] = "Pin isn't corect";
 
-                con.Close();
+                
             }
-
-
             return View();
         }
 
         [HttpPost]
         public ActionResult redirect_email()
-        {
-            
+        {           
             return RedirectToAction("Account_email", "Account_mail");
-
         }
 
         [HttpPost]
         public ActionResult redirect_password()
-        {
-            
+        {           
             return RedirectToAction("Account_password", "Account_pass");
-
         }
 
     }
