@@ -8,10 +8,17 @@
 }
 
 <div>
+
+
     <form asp-action="CultureManagement" asp-controller="Home" method="post" asp-route-returnUrl="@returnUrl">
         <select style="margin-top:10px;margin-right:10px; "
                 name="culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="cultureList"
                 onchange="this.form.submit();"></select>
-    </form>
 
+        @if (culture.RequestCulture.UICulture.Name == "ru")
+        {<img style="width:30px;height:30px; margin-top:-2px;" src="https://cdn-icons-png.flaticon.com/512/317/317289.png" />}
+        else
+            if (culture.RequestCulture.UICulture.Name == "en")
+        {<img style="width: 30px; height: 30px; margin-top: -2px;" src="https://cdn-icons-png.flaticon.com/512/330/330459.png" />}
+        </form>
 </div>
