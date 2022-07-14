@@ -17,19 +17,19 @@ using Microsoft.AspNetCore.Localization;
 namespace Web_Application.Controllers
 {
     public class AccountController : Controller
-    {
-        SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
+    {      
         Guid random_secret_key = Guid.NewGuid();
 
         private IHttpContextAccessor Accessor;
         
         private string username;
+        private readonly ConString _conString;
         private readonly IHtmlLocalizer<AccountController> _localizer;
 
 
-        public AccountController(IHttpContextAccessor _accessor, IHtmlLocalizer<AccountController> localizer)
+        public AccountController(ConString conection,IHttpContextAccessor _accessor, IHtmlLocalizer<AccountController> localizer)
         {
+            _conString = conection;
             this.Accessor = _accessor;
             _localizer = localizer;
         }
@@ -44,32 +44,16 @@ namespace Web_Application.Controllers
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(1);
 
-            con.Open();
+           
             //get email fron table
-            string query_email = string.Format("select email from UserData " +
-                "where username='{0}'", username);
-
-            SqlCommand cmd = new SqlCommand(query_email, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if (reader.Read() == true)
-              ViewData["Email"] = reader.GetString(0);
-
-            //get enable or not 2fa
-            string query_2fa = string.Format("select tfa from UserData " +
-               "where username='{0}'", username);
-
-            SqlCommand cmd1 = new SqlCommand(query_2fa, con);
-            SqlDataReader reader1 = cmd1.ExecuteReader();
-
-            if (reader1.Read() == true)
-            {
-                if (reader1.GetString(0) == "0") { ViewBag.display_2fa = "0"; Response.Cookies.Append("status_2fa", "0", option); }
+            
+            var user_db = _conString.UserData.Single(userdata => userdata.Username == username);
+           
+              ViewData["Email"] = user_db.Email;
+            if (user_db.TFA=="0") { ViewBag.display_2fa = "0"; Response.Cookies.Append("status_2fa", "0", option); }
                 else
-                         if (reader1.GetString(0) == "1") { ViewBag.display_2fa = "1"; Response.Cookies.Append("status_2fa", "1", option); }
-            }
-            con.Close();        
-
+                         if (user_db.TFA == "1") { ViewBag.display_2fa = "1"; Response.Cookies.Append("status_2fa", "1", option); }
+                       
 
             //Create a Cookie with a suitable Key and add the Cookie to Browser.
             Response.Cookies.Append("hide_layout", "true", option);

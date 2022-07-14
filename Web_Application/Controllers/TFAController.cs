@@ -13,20 +13,18 @@ namespace Web_Application.Controllers
 {
     public class TFAController : Controller
     {
-        SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
         Guid random_secret_key = Guid.NewGuid();
 
         private IHttpContextAccessor Accessor;
-
+        private readonly ConString _conString;
         private string username;
         private readonly IHtmlLocalizer<TFAController> _localizer;
 
-        public TFAController(IHttpContextAccessor _accessor, IHtmlLocalizer<TFAController> localizer)
+        public TFAController(ConString conection,IHttpContextAccessor _accessor, IHtmlLocalizer<TFAController> localizer)
         {
+            _conString = conection;
             this.Accessor = _accessor;
             _localizer = localizer;
-
         }
 
         public IActionResult TFA()
@@ -40,37 +38,20 @@ namespace Web_Application.Controllers
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(1);
 
-            con.Open();
-            string query_email = string.Format("select email from UserData " +
-                "where username='{0}'", username);
-
-            SqlCommand cmd = new SqlCommand(query_email, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if (reader.Read() == true)
-                ViewData["Email"] = reader.GetString(0);
+            //query select EF
+            var user_db = _conString.UserData.Single(userdata=>userdata.Username==username);
+               if (user_db.Email!=null) ViewData["Email"] = user_db.Email;
 
             //Create a Cookie with a suitable Key and add the Cookie to Browser.
             Response.Cookies.Append("hide_layout", "true", option);
             //if log in hide unnecessary element
             ViewBag.hide_elements_layout = true;
 
-
-
-            string query_2fa = string.Format("select tfa from UserData " +
-                "where username='{0}'", username);
-
-            SqlCommand cmd1 = new SqlCommand(query_2fa, con);
-            SqlDataReader reader1 = cmd1.ExecuteReader();
-
-            if (reader1.Read() == true)
-            {
-                if (reader1.GetString(0) == "0") { ViewBag.display_2fa = "0"; ViewData["2FA"] = "Disabled"; }
+       
+                if (user_db.TFA == "0") { ViewBag.display_2fa = "0"; ViewData["2FA"] = "Disabled"; }
                 else
-                         if (reader1.GetString(0) == "1") { ViewBag.display = "1"; ViewData["2FA"] = "Enabled"; }
-            }
-            con.Close();
-
+                         if (user_db.TFA == "1") { ViewBag.display = "1"; ViewData["2FA"] = "Enabled"; }
+           
 
             //Get text for language set
             var get_resource_data = _localizer["TextManage"];
@@ -124,7 +105,6 @@ namespace Web_Application.Controllers
         [HttpPost]
         public ActionResult redirect_email()
         {
-
             return RedirectToAction("Account_email", "Account_mail");
 
         }
@@ -132,7 +112,6 @@ namespace Web_Application.Controllers
         [HttpPost]
         public ActionResult redirect_password()
         {
-
             return RedirectToAction("Account_password", "Account_pass");
 
         }

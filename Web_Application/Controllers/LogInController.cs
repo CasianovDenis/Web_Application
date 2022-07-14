@@ -18,10 +18,12 @@ namespace Web_Application.Controllers
     {
 
         private IHttpContextAccessor Accessor;
+        private readonly ConString _conString;
         private readonly IHtmlLocalizer<LogInController> _localizer;
 
-        public LogInController(IHttpContextAccessor _accessor, IHtmlLocalizer<LogInController> localizer)
+        public LogInController(ConString conection,IHttpContextAccessor _accessor, IHtmlLocalizer<LogInController> localizer)
         {
+            _conString = conection;
             this.Accessor = _accessor;
             _localizer = localizer;
         }
@@ -34,9 +36,7 @@ namespace Web_Application.Controllers
             //Create a Cookie with a suitable Key and add the Cookie to Browser.
             Response.Cookies.Append("hide_layout", "false", option);
 
-
             ViewBag.hide_elements_layout = false;
-
 
             //Get text for language set
             var get_resource_data = _localizer["User_name"];
@@ -56,91 +56,46 @@ namespace Web_Application.Controllers
         public IActionResult SignIn(UserData user)
         {
 
-            SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(1);
+          
+            //create select query to table UserData use Entity Framework
+            var user_db = _conString.UserData.Single(userdata => userdata.Username == user.Username);
 
-            con.Open();
-            string query_username = string.Format("select username from UserData " +
-                "where username='{0}'", user.Username);
-            string query_password = string.Format("select password from UserData " +
-                "where username='{0}'", user.Username);
-            string query_2fa = string.Format("select tfa from UserData " +
-               "where username='{0}'", user.Username);
-
-            SqlCommand cmd = new SqlCommand(query_username, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-
-
-
-
-            SqlCommand cmd2 = new SqlCommand(query_2fa, con);
-            SqlDataReader reader2 = cmd2.ExecuteReader();
-
-            if (reader2.Read() == true)
+            if (user_db.TFA == "1")
             {
-                                    
-                if (reader2.GetString(0) == "1")
+                if (user_db.Username == user.Username)
                 {
-
-                    if (reader.Read() == true)
+                    if (user_db.Password == user.Password)
                     {
-                        reader.Close();
+                        Response.Cookies.Append("UserName", user.Username, option);
 
-                        SqlCommand cmd1 = new SqlCommand(query_password, con);
-                        SqlDataReader reader1 = cmd1.ExecuteReader();
-
-                        if (reader1.Read() == true)
-                        {
-                            if (reader1.GetString(0) == user.Password)
-                            {
-                                //Create a Cookie with a suitable Key and add the Cookie to Browser.
-                                Response.Cookies.Append("UserName", user.Username, option);
-
-                                return RedirectToAction("TFA_LogIn", "SignIn_TFA");
-                            }
-
-                        }
+                        return RedirectToAction("TFA_LogIn", "SignIn_TFA");
                     }
                 }
-                else
-                   if (reader2.GetString(0) == "0")
-                {
-                    if (reader.Read() == true)
-                    {
-                        reader.Close();
-
-                        SqlCommand cmd1 = new SqlCommand(query_password, con);
-                        SqlDataReader reader1 = cmd1.ExecuteReader();
-
-                        if (reader1.Read() == true)
-                        {
-                            if (reader1.GetString(0) == user.Password)
-                            {
-
-                               
-
-                                //Create a Cookie with a suitable Key and add the Cookie to Browser.
-                                Response.Cookies.Append("UserName", user.Username, option);
-
-                                return RedirectToAction("Account", "Account");
-                            }
-
-                        }
-                    }
-                }
-               
             }
+            else
+                if (user_db.TFA == "0")
+            {
+
+                if (user_db.Username == user.Username)
+                {
+
+                    if (user_db.Password == user.Password)
+                    {
+
+                        Response.Cookies.Append("UserName", user.Username, option);
+
+                        return RedirectToAction("Account", "Account");
+                    }
+                }
+            }
+
             var get_resource_data = _localizer["Incorectdata"];
             ViewData["Incorectdata"] = get_resource_data;
-            
-            con.Close();
+                       
             return View();
             }
-
-
         }
     }
 

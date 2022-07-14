@@ -13,16 +13,15 @@ namespace Web_Application.Controllers
 {
     public class SignIn_TFAController : Controller
     {
-        SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
         string username;
-
+        private readonly ConString _conString;
         private IHttpContextAccessor Accessor;
         private readonly IHtmlLocalizer<SignIn_TFAController> _localizer;
 
 
-        public SignIn_TFAController(IHttpContextAccessor _accessor, IHtmlLocalizer<SignIn_TFAController> localizer)
+        public SignIn_TFAController(ConString conection, IHttpContextAccessor _accessor, IHtmlLocalizer<SignIn_TFAController> localizer)
         {
+            _conString = conection;
             this.Accessor = _accessor;
             _localizer = localizer;
         }
@@ -52,17 +51,12 @@ namespace Web_Application.Controllers
         public ActionResult TFA_LogIn(UserData user)
         {
             TFA_LogIn();
-            string query_key = string.Format("select secretkey from UserData " +
-                "where username='{0}'", username);
+            //Query select EF
+            var user_db = _conString.UserData.Single(userdata=>userdata.Username == username);
 
-            con.Open();
-            SqlCommand cmd = new SqlCommand(query_key, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if (reader.Read() == true)
+            if (user_db.Secretkey!=null)
             {
-                string google_key = reader.GetString(0);
-
+                string google_key = user_db.Secretkey;
 
                 TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
 
@@ -70,19 +64,14 @@ namespace Web_Application.Controllers
 
                 bool status = tfa.ValidateTwoFactorPIN(google_key, pin, TimeSpan.FromSeconds(30));
 
-
                 if (status == true) return RedirectToAction("Account", "Account");
 
                 else
                 {
                     var get_resource_data = _localizer["Incorectpin"];
                     ViewData["Incorectpin"] = get_resource_data;
-                }
-
-                con.Close();
-            }
-            
-
+                }             
+            }          
             return View();
         }
     }

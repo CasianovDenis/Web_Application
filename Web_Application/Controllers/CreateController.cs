@@ -58,7 +58,6 @@ namespace Web_Application.Controllers
                         _conString.Add(user);
                         _conString.SaveChanges();
 
-
                         var get_resource_data = _localizer["create_message"];
                         ViewData["create_message"] = get_resource_data;
                     }
@@ -88,7 +87,7 @@ namespace Web_Application.Controllers
         public bool existemail(UserData user)
         {
             bool flag = false;
-
+            //create select query email use Entity Framework
             var username = _conString.UserData.Where(name => name.Email == user.Email)
                 .FirstOrDefault();
 
@@ -106,15 +105,20 @@ namespace Web_Application.Controllers
             bool flag = false;
             int count = 0;
 
-            char[] passchar = user.Password.ToCharArray(); 
-
-            for (int index=0;index<user.Password.Length;index++)
+            try
             {
-                if (Char.IsLetter(passchar[index]) == true) count = count + 1;
-                if (Char.IsNumber(passchar[index]) == true) count = count + 1;
-                if (Char.IsUpper(passchar[index]) == true) count = count + 1;
-                if (Char.IsSymbol(passchar[index]) == true) count = count + 1;
+                for (int index = 0; index < user.Password.Length; index++)
+                {
+                    if (Char.IsLetter(user.Password[index]) == true) count = count + 1;
+                    if (Char.IsNumber(user.Password[index]) == true) count = count + 1;
+                    if (Char.IsUpper(user.Password[index]) == true) count = count + 1;
+                    if (Char.IsSymbol(user.Password[index]) == true) count = count + 1;
 
+                }
+            }
+            catch 
+            {
+                //catch error empty field,display password not secure using if        
             }
             if (count >= 8) flag = false; 
             else

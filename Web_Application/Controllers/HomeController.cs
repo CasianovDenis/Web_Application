@@ -20,11 +20,12 @@ namespace Web_Application.Controllers
         private readonly IHtmlLocalizer<HomeController> _localizer;
         private IHttpContextAccessor Accessor;
           private readonly ILogger<HomeController> _logger;
+        private readonly ConString _conString;
 
-
-          public HomeController(ILogger<HomeController> logger, IHttpContextAccessor _accessor, IHtmlLocalizer<HomeController> localizer)
+        public HomeController(ConString conection, ILogger<HomeController> logger, IHttpContextAccessor _accessor, IHtmlLocalizer<HomeController> localizer)
           {
-              _logger = logger;
+            _conString = conection;
+            _logger = logger;
             this.Accessor = _accessor;
             _localizer = localizer;
           }
@@ -39,20 +40,11 @@ namespace Web_Application.Controllers
             {
                 string username = this.Accessor.HttpContext.Request.Cookies["UserName"];
 
-                ViewData["Username"] = username;
+                ViewData["Username"] = username;               
 
-
-                SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
-                con.Open();
-                string query_email = string.Format("select email from UserData " +
-                    "where username='{0}'", username);
-
-                SqlCommand cmd = new SqlCommand(query_email, con);
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.Read() == true)
-                    ViewData["Email"] = reader.GetString(0);
+                //create select query EF
+                var user_db = _conString.UserData.Single(userdata=>userdata.Username == username);
+                    ViewData["Email"] = user_db.Email;
 
                 ViewBag.hide_elements_layout = Convert.ToBoolean(hide_layout);
                
