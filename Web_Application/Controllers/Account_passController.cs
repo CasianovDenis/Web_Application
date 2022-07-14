@@ -17,18 +17,18 @@ namespace Web_Application.Controllers
 {
     public class Account_passController : Controller
     {
-
-        SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
+        
         Guid random_secret_key = Guid.NewGuid();
 
         private IHttpContextAccessor Accessor;
 
         private string username;
+        private readonly ConString _conString;
         private readonly IHtmlLocalizer<Account_passController> _localizer;
 
-        public Account_passController(IHttpContextAccessor _accessor, IHtmlLocalizer<Account_passController> localizer)
+        public Account_passController(ConString conection, IHttpContextAccessor _accessor, IHtmlLocalizer<Account_passController> localizer)
         {
+            _conString = conection;
             this.Accessor = _accessor;
             _localizer = localizer;
 
@@ -47,24 +47,14 @@ namespace Web_Application.Controllers
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(1);
 
-            Response.Cookies.Append("open_form", "password", option);
-            //set form display
-            //ViewBag.open_form = this.Accessor.HttpContext.Request.Cookies["open_form"];
-
-            con.Open();
-            string query_email = string.Format("select email from UserData " +
-                "where username='{0}'", username);
-
-            SqlCommand cmd = new SqlCommand(query_email, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if (reader.Read() == true)
+            //create select query to table UserData use Entity Framework
+            var user_db = _conString.UserData.Single(userdata => userdata.Username == username);
+            if (user_db.Email != null)
             {
-                ViewData["Email"] = reader.GetString(0);
-                ViewBag.email = reader.GetString(0);
+                ViewData["Email"] = user_db.Email;
+                ViewBag.email = user_db.Email;
             }
-            con.Close();
-            
+
             //Create a Cookie with a suitable Key and add the Cookie to Browser.
             Response.Cookies.Append("hide_layout", "true", option);
             //if log in hide unnecessary element
@@ -117,9 +107,7 @@ namespace Web_Application.Controllers
             option.Expires = DateTime.Now.AddDays(1);
             
 
-            //check if setting->password
-            
-            
+            //check if setting->password                    
                 if (oldpass(user) == false)
                 {
                     if (checkpass(user) == false)
@@ -144,11 +132,8 @@ namespace Web_Application.Controllers
                         Smtp.Send(Message);
 
                         Response.Cookies.Append("secret_key_password", random_secret_key.ToString(), option);
-
-
-                        Response.Cookies.Append("password",user.Password, option);
-                        
-
+                       
+                       
                         ViewData["WarningPassword"] = "Check you email";
                         return RedirectToAction("Verification_password", "Verification");
                     }
@@ -181,25 +166,23 @@ namespace Web_Application.Controllers
         {
             bool flag = false;
             int count = 0;
+
             try
             {
-                char[] passchar = user.Password.ToCharArray();
-
                 for (int index = 0; index < user.Password.Length; index++)
                 {
-                    if (Char.IsLetter(passchar[index]) == true) count = count + 1;
-                    if (Char.IsNumber(passchar[index]) == true) count = count + 1;
-                    if (Char.IsUpper(passchar[index]) == true) count = count + 1;
-                    if (Char.IsSymbol(passchar[index]) == true) count = count + 1;
-
+                    if (Char.IsLetter(user.Password[index]) == true) count = count + 1;
+                    if (Char.IsNumber(user.Password[index]) == true) count = count + 1;
+                    if (Char.IsUpper(user.Password[index]) == true) count = count + 1;
+                    if (Char.IsSymbol(user.Password[index]) == true) count = count + 1;
                 }
             }
             catch
             {
-                var get_resource_data = _localizer["EmptyPass"];
-                ViewData["EmptyPass"] = get_resource_data;
+                //catch error empty field,display password not secure using if               
             }
-            if (count >= 8) flag = false;
+
+            if (count >= 8)  flag = false;               
             else
                if (count < 8)
             {
@@ -214,21 +197,17 @@ namespace Web_Application.Controllers
         public bool oldpass(UserData user)
         {
             bool flag = false;
+          
+            //create select query email use Entity Framework
+            var password = _conString.UserData.Where(pass => pass.Password == user.Password)
+                .FirstOrDefault();
 
-            con.Open();
-            string query_password = string.Format("select password from UserData " +
-                "where username='{0}'", username);
-
-            SqlCommand cmd = new SqlCommand(query_password, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if (reader.Read() == true)
-                if (reader.GetString(0) == user.Password) {
-                    var get_resource_data = _localizer["Oldpass_true"];
-                    ViewData["Oldpass_true"] = get_resource_data;
-                    flag = true; }
-            con.Close();
-
+            if (password != null)
+            {
+                flag = true;
+                var get_resource_data = _localizer["Oldpass_true"];
+                ViewData["Oldpass_true"] = get_resource_data;
+            }
             return flag;
         }
 

@@ -13,18 +13,17 @@ using Web_Application.Models;
 namespace Web_Application.Controllers
 {
     public class Account_mailController : Controller
-    {
-        SqlConnection con = new SqlConnection("Server=DESKTOP-EIMAL7F;Database=MyTable;Trusted_Connection=True;MultipleActiveResultSets=true");
-
+    {      
         Guid random_secret_key = Guid.NewGuid();
 
         private IHttpContextAccessor Accessor;
-
+        private readonly ConString _conString;
         private string username;
         private readonly IHtmlLocalizer<Account_mailController> _localizer;
 
-        public Account_mailController(IHttpContextAccessor _accessor, IHtmlLocalizer<Account_mailController> localizer)
+        public Account_mailController(ConString conection, IHttpContextAccessor _accessor, IHtmlLocalizer<Account_mailController> localizer)
         {
+            _conString = conection;
             this.Accessor = _accessor;
             _localizer = localizer;
 
@@ -41,24 +40,14 @@ namespace Web_Application.Controllers
 
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(1);
-            
-           
 
-            con.Open();
-            string query_email = string.Format("select email from UserData " +
-                "where username='{0}'", username);
-
-            SqlCommand cmd = new SqlCommand(query_email, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if (reader.Read() == true)
-            {
-                ViewData["Email"] = reader.GetString(0);
-                ViewBag.email = reader.GetString(0);
-            }
-            con.Close();
-
-
+            //create select query to table UserData use Entity Framework
+            var user_db = _conString.UserData.Single(userdata => userdata.Username == username);
+            if (user_db.Email != null)
+            { 
+                ViewData["Email"] = user_db.Email;
+            ViewBag.email = user_db.Email;
+        }
 
             //Create a Cookie with a suitable Key and add the Cookie to Browser.
             Response.Cookies.Append("hide_layout", "true", option);
@@ -130,9 +119,7 @@ namespace Web_Application.Controllers
             option.Expires = DateTime.Now.AddDays(1);
 
            
-            //check if setting->email
-
-           
+            //check if setting->email    
        if (existemail(user) == false)
             {
                                 
@@ -140,7 +127,6 @@ namespace Web_Application.Controllers
                 Smtp.EnableSsl = true;
                 Smtp.Credentials = new NetworkCredential("email@mail.ru", "password");//real email and password
                                                                                                           //was hide
-
                 MailMessage Message = new MailMessage();
                 Message.From = new MailAddress("email@mail.ru");//real email was hide
 
@@ -165,26 +151,17 @@ namespace Web_Application.Controllers
         {
             bool flag = false;
 
-            con.Open();
-            string query_email = string.Format("select email from UserData " +
-                "where email='{0}'", user.Email);
+            //Query email for verific,exist input email on the field in db
+            var email = _conString.UserData.Where(mail => mail.Email == user.Email)
+                .FirstOrDefault();
 
-            SqlCommand cmd = new SqlCommand(query_email, con);
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read() == true)
+            if (email != null)
             {
+                flag = true;
                 var get_resource_data = _localizer["WarningEmail"];
                 ViewData["WarningEmail"] = get_resource_data;
-                flag = true; }
-
-            con.Close();
-
+            }
             return flag;
-        }
-
-       
-
-       
-
+        }              
     }
 }
