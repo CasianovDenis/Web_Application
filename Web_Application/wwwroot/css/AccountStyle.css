@@ -14,7 +14,14 @@
     button {
         font-size: 16px;
     }
-}
+    #text_help {
+        font-size: 16px;
+    }
+    .container {
+        width:100%;
+    }
+
+    }
 
 /*layout*/
 #account_image
@@ -29,6 +36,10 @@
     height: 16px;
 }
 
+#text_help {
+    margin-top: -88px;
+    margin-left: 220px;
+}
 
 #a_email {
     text-align: center;
