@@ -34,12 +34,15 @@
                         });
                     });
                 </script>
+                
                 <form asp-action="redirect_email">
-                    <input type="submit" class="btn btn-primary buton" value="@ViewData["Mail"]" />
+                 <input type="submit" class="btn btn-primary buton" value="@ViewData["Mail"]" />
                 </form>
+                
                 <form asp-action="redirect_password">
                     <input type="submit" class="btn btn-primary buton" value="@ViewData["Password"]" />
                 </form>
+                
                 <form asp-action="redirect_on_2fa">
                     <input type="submit" class="btn btn-primary buton" value="@ViewData["tfa"]" />
                 </form>
